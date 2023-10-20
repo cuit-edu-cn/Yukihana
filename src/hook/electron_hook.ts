@@ -58,8 +58,12 @@ const hookLoadUrl = () => {
 
 const hookIpcMain = () => {
   const ipcMap: Record<string, (event: Electron.IpcMainEvent, ...args: any[]) => void> = {}
-  ;
-  (ipcMain as any)._on = ipcMain.on
+  /**
+   * 不能使用一个变量承接，会导致无法启动
+   * const _on = ipcMain.on
+   * _on(...)
+   */
+  ;(ipcMain as any)._on = ipcMain.on
   ipcMain.on = function(...args) {
     console.log('ipcMain on register:', args)
     if (args[0].includes('IPC_UP')) {
@@ -75,14 +79,15 @@ const hookIpcMain = () => {
       args[1](event, ...a)
     })
   }
-
-  const _handle = ipcMain.handle
+  
+  // 不能使用一个变量承接，会导致无法启动
+  ;(ipcMain as any)._handle = ipcMain.handle
   ipcMain.handle = function(...args) {
     console.log(`\nipcMain handle register from ${args[0]}:`, args)
-    return _handle(args[0], function(...a) {
+    return (ipcMain as any)._handle(args[0], function(event: Electron.IpcMainInvokeEvent, ...a: any[]) {
       // console.log('\nipcMain handle emit, arg length:', a.length)
       // console.log('args:', ...a)
-      args[1](...a)
+      args[1](event, ...a)
     })
   }
 }
