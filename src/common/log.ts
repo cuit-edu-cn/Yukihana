@@ -25,15 +25,7 @@ type InterceptorFuncType = (config: LoggerConfigType) => void
 
 const isLogEnabled = true
 
-const CurrentLogLevel: LogLevel = (() => {
-  const level = localStorage.getItem('LogLevel')
-  if (level == null) return LogLevel.Info
-  if (level === 'Trace') return LogLevel.Trace
-  if (level === 'Info') return LogLevel.Info
-  if (level === 'Warning') return LogLevel.Warning
-  if (level === 'Error') return LogLevel.Error
-  return LogLevel.Info
-})()
+const CurrentLogLevel: LogLevel = LogLevel.Info
 
 /**
  * 日志打印工具，统一管理日志输出&上报
