@@ -1,6 +1,7 @@
 import { Module } from "module"
 import { getHookedBrowserWindow } from "./electron_hook"
-
+import { useLogger } from "../common/log"
+const log = useLogger('ModuleHook')
 export const hookModule = () => {
   const HookedBrowserWindow = getHookedBrowserWindow()
   const ModuleLoadHook: Record<string, (m: any) => any> = {
@@ -93,7 +94,7 @@ export const hookModule = () => {
   }
   const original_compile = (Module as any)._compile;
   (Module as any)._compile = function(...args: any[]) {
-    console.log('_compile:', ...args)
+    log.info('_compile:', ...args)
     return original_compile(...args)
   }
 }
