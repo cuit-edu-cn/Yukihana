@@ -1,5 +1,5 @@
 import { useLogger } from "../common/log"
-import { NTEventSendInfo } from "../store/interfaces"
+import { IpcDownInfo, IpcUpInfo } from "../store/interfaces"
 import { useStore } from "../store/store"
 import { CallbackInfo } from "./interfaces"
 
@@ -10,29 +10,36 @@ const log = useLogger('Base')
  */
 const callbackMap: Record<string, CallbackInfo> = {}
 
-export const sendEvent = (channel: string, reqInfo: NTEventSendInfo, reqData: any[]) => {
+export const sendEvent = (channel: string, reqInfo: IpcUpInfo, reqData: any[]) => {
   log.info('sendEvent')
-  return new Promise((resolve, reject) => {
+  return new Promise<{info: IpcDownInfo, data: any[]}>((resolve, reject) => {
     const timeout = setTimeout(() => {
       log.info('log timeout')
       reject('timeout')
     }, 30000)
-    callbackMap[reqInfo.callbackId] = {
-      resolve,
-      reject,
-      timeout,
+    if (reqInfo.callbackId){
+      callbackMap[reqInfo.callbackId] = {
+        resolve,
+        reject,
+        timeout,
+      }
+      log.info('getIpcMainSend')
+      const send = getIpcMainSend(channel)
+      send({} as any, reqInfo, reqData)
     }
-    log.info('getIpcMainSend')
-    const send = getIpcMainSend(channel)
-    send({} as any, reqInfo, reqData)
+    else {
+      reject()
+    }
+    
   })
   
 }
+
 export const initBaseEvent = () => {
   registerIpcMainReceive('IPC_DOWN_2', (info, data) => {
     // log.info('Receive', info, data)
     const { callbackId } = info
-    if (!callbackMap[callbackId]){
+    if (!callbackId || !callbackMap[callbackId]){
       // log.info('没有找到回调方法！')
       return
     }
@@ -43,7 +50,7 @@ export const initBaseEvent = () => {
       h.reject({info, data})
     }
     else {
-      h.resolve(data)
+      h.resolve({info, data})
     }
   })
 }

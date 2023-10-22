@@ -1,11 +1,20 @@
-export interface NTEventSendInfo {
+/**
+ * UP
+ * GUI -> MAIN
+ */
+export interface IpcUpInfo {
   type: 'request'
-  callbackId: string
-  eventName: 'ns-ntApi-2'
+  callbackId?: string
+  eventName: string
 }
-export interface NTEventReceiveInfo {
+
+/**
+ * DOWN
+ * MAIN -> GUI
+ */
+export interface IpcDownInfo {
   type: 'response'
-  callbackId: string
+  callbackId?: string
   promiseStatue: string
   eventName: string
 }

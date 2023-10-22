@@ -1,9 +1,9 @@
 import { useLogger } from "../common/log"
-import { NTEventReceiveInfo, NTEventSendInfo } from "./interfaces"
+import { IpcDownInfo, IpcUpInfo } from "./interfaces"
 
 const log = useLogger('Store')
-const ipcMainMap: Record<string, (event: Electron.IpcMainEvent, info: NTEventSendInfo, ...args: any[]) => void> = {}
-const ipcMainReceive: Record<string, (info: NTEventReceiveInfo, data: any) => void> = {}
+const ipcMainMap: Record<string, (event: Electron.IpcMainEvent, info: IpcUpInfo, ...args: any[]) => void> = {}
+const ipcMainReceive: Record<string, (info: IpcDownInfo, data: any) => void> = {}
 
 /**
  * GUI通过通道发送消息给electron
@@ -35,7 +35,7 @@ const getIpcMainSend = (channel: string) => {
  * @param channel 通道
  * @param listener 监听器
  */
-const registerIpcMainReceive = (channel: string, listener: (info: NTEventReceiveInfo, data: any) => void) => {
+const registerIpcMainReceive = (channel: string, listener: (info: IpcDownInfo, data: any) => void) => {
   ipcMainReceive[channel] = listener
 }
 

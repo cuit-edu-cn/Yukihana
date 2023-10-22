@@ -8,7 +8,13 @@ const enum LogLevel {
   /** 错误日志 */
   Error,
 }
-
+const _console = {
+  log: console.log,
+  info: console.info,
+  warn: console.warn,
+  error: console.error,
+  trace: console.trace,
+}
 const Styles = ['color: black;', 'color: green;', 'color: orange;', 'color: red;']
 const Methods = ['log', 'info', 'warn', 'error'] as const
 /**
@@ -57,7 +63,7 @@ class Logger {
     // 优先级小的不显示
     if (level < CurrentLogLevel) return
     this.beforeFuncs.forEach(e => e(this.config))
-    console[Methods[level]](`%c${this.config.namespace}`, Styles[level], ...args)
+    _console[Methods[level]](`%c${this.config.namespace}`, Styles[level], ...args)
     this.afterFuncs.forEach(e => e(this.config))
   }
 

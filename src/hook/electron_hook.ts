@@ -1,7 +1,20 @@
 import { ipcMain, BrowserWindow, app } from 'electron'
 import { useLogger } from '../common/log';
 import { useStore } from '../store/store';
-
+import { readFileSync, writeFileSync } from 'fs';
+// let tempEventStore: any = {};
+// (() => {
+//   try {
+//     const d = readFileSync('./event.json')
+//     tempEventStore = JSON.parse(d.toString())
+//   }catch(e) {
+//     tempEventStore = {}
+//   }finally{
+//     setInterval(() => {
+//       writeFileSync('./event.json', JSON.stringify(tempEventStore, null, 4))
+//     }, 2000)
+//   }
+// })()
 const log = useLogger('ElectronHook')
 export const getHookedBrowserWindow = () => {
   const hookBrowserWindow = (OriginalBrowserWindow: any) => {
@@ -48,18 +61,31 @@ const hookLoadUrl = () => {
     const extPath = path.join(path.dirname(app.getAppPath()), "extensions");
     // log.info('----extPath----', extPath)
     const _send = this.webContents.send
-    this.webContents.send = function(channel, ...args) {
-      // log.info('\n\n=====\nsend:', channel, JSON.stringify(args))
+    this.webContents.send = function(channel, ...a) {
+      
+      if (channel.includes('IPC_DOWN')) {
+        // if(!tempEventStore[channel]) tempEventStore[channel] = {}
+        const info = a[0]
+        const data = a[1]
+        if (info?.eventName) {
+          // if (!tempEventStore[channel][info.eventName]) tempEventStore[channel][info.eventName] = []
+          // tempEventStore[channel][info.eventName].push({
+          //   info,
+          //   data
+          // })
+        }
+        log.info('\nsend:', channel, JSON.stringify(a))
+      }
       // log.info('寻找监听器...')
       const listener = getIpcMainReceiveListener(channel)
       if (listener) {
         // log.info('找到监听器，开始处理...')
-        listener(args[0], args[1])
+        listener(a[0], a[1])
       }
       // else {
         // log.info('没有找到监听器！')
       // }
-      return _send.apply(this, [channel, ...args])
+      return _send.apply(this, [channel, ...a])
     }
     // this.webContents.session.loadExtension(extPath + "/extension").then(({ id }) => {
     //   // ...
@@ -78,19 +104,32 @@ const hookIpcMain = () => {
    */
   ;(ipcMain as any)._on = ipcMain.on
   // gui发送消息，electron 收到消息
-  ipcMain.on = function(...args) {
+  ipcMain.on = function(channel, listener) {
     // log.info('ipcMain on register:', args)
-    if (args[0].includes('IPC_UP')) {
-      addIpcMainSend(args[0], args[1])
+    if (channel.includes('IPC_UP')) {
+      addIpcMainSend(channel, listener)
     }
-    return (ipcMain as any)._on(args[0], function(event: Electron.IpcMainEvent, ...a: any[]) {
-      // log.info(`\nipcMain emit for ${args[0]}:`, args)
-      // log.info('args:', ...a)
-      for (let i = 0; i < a.length; i++) {
-        const arg = a[i]
-        // log.info(`arg${i}:`, arg)
+    return (ipcMain as any)._on(channel, function(event: Electron.IpcMainEvent, ...a: any[]) {
+
+      if (channel?.includes('IPC_UP') && a.length >= 2 && a[1]) {
+        // 存储eventStore
+        // if(!tempEventStore[channel]) tempEventStore[channel] = {}
+        const eventName = a[0]?.eventName
+        if (eventName) {
+          // if (!tempEventStore[channel][eventName]) tempEventStore[channel][eventName] = []
+          // tempEventStore[channel][eventName].push({
+          //   info: a[0],
+          //   data: a[1]
+          // })
+          log.info(`\nipcMain emit for ${channel}: eventName - ${a[0]?.eventName}, callbackId - ${a[0]?.callbackId}, data - ${JSON.stringify(a[1])}`)
+        }
       }
-      args[1](event, ...a)
+      // log.info('args:', ...a)
+      // for (let i = 0; i < a.length; i++) {
+      //   const arg = a[i]
+      //   log.info(`arg${i}:`, arg)
+      // }
+      listener(event, ...a)
     })
   }
   
@@ -106,6 +145,9 @@ const hookIpcMain = () => {
   }
 }
 
+/**
+ * 对Electron的一些关键类或方法进行拦截操作
+ */
 export const hookElectron = () => {
   hookLoadUrl()
   hookIpcMain()
