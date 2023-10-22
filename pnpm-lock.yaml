@@ -8,6 +8,9 @@ dependencies:
   nodejs-websocket:
     specifier: ^1.7.2
     version: 1.7.2
+  uuid:
+    specifier: ^9.0.1
+    version: 9.0.1
   ws:
     specifier: ^8.14.2
     version: 8.14.2
@@ -25,6 +28,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.8.7
     version: 20.8.7
+  '@types/uuid':
+    specifier: ^9.0.6
+    version: 9.0.6
   '@types/ws':
     specifier: ^8.5.8
     version: 8.5.8
@@ -284,6 +290,10 @@ packages:
     resolution: {integrity: sha512-/4YQT5Kp6HxUDb4yhRkm0bJ7TbjvTddqX7PZ5hz6qV3pxSo72f/6YPRo+Mu2DU307tm9IioO69l7uAwn5XNcFA==}
     dependencies:
       '@types/node': 20.8.7
+    dev: true
+
+  /@types/uuid@9.0.6:
+    resolution: {integrity: sha512-BT2Krtx4xaO6iwzwMFUYvWBWkV2pr37zD68Vmp1CDV196MzczBRxuEpD6Pr395HAgebC/co7hOphs53r8V7jew==}
     dev: true
 
   /@types/ws@8.5.8:
@@ -888,6 +898,11 @@ packages:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
     dev: true
+
+  /uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    hasBin: true
+    dev: false
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}

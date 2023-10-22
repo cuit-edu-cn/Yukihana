@@ -1,7 +1,7 @@
 /**
  * 动作请求
  */
-export interface ActionRequest<T> {
+export interface ActionRequest<T = any> {
   /**
    * 唯一标识uuid
    */
@@ -19,7 +19,7 @@ export interface ActionRequest<T> {
 /**
  * 动作响应
  */
-export interface ActionResponse<T> {
+export interface ActionResponse<T = any> {
   /**
    * 唯一标识uuid，与对应请求一致
    */

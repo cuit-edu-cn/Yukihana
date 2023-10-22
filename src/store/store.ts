@@ -1,4 +1,5 @@
 import { useLogger } from "../common/log"
+import { ActionResponse } from "../onebot/actions/interfaces"
 import { IpcDownInfo, IpcUpInfo } from "./interfaces"
 
 const log = useLogger('Store')
@@ -48,11 +49,39 @@ const getIpcMainReceiveListener = (channel: string) => {
   // receive
   return ipcMainReceive[channel]
 }
+
+const ActionMap: Record<string, (p: any) => ActionResponse> = {}
+
+/**
+ * 获取动作处理函数
+ * @param action 动作名称
+ * @returns 处理函数
+ */
+const getActionHandle = (action: string) => {
+  return ActionMap[action]
+}
+
+/**
+ * 注册动作处理函数
+ * @param name 动作名称
+ * @param handle 动作处理函数
+ */
+const registerActionHandle = (name: string, handle: (p: any) => ActionResponse) => {
+  if (ActionMap[name]) {
+    log.warn('Action: %s已经被注册，将覆盖旧的处理函数', name)
+  }
+  ActionMap[name] = handle
+}
+
 export const useStore = () => {
   return {
     addIpcMainSend,
     getIpcMainSend,
+    
     registerIpcMainReceive,
     getIpcMainReceiveListener,
+    
+    registerActionHandle,
+    getActionHandle,
   }
 }
