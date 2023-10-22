@@ -23,9 +23,10 @@ declare namespace NsNtApi2 {
     guildId: string
   }
 
-  export interface CmdData<T> {
-    cmdName: string
-    cmdType: string
-    payload: T
-  }
+}
+
+export interface CmdData<PayloadType = any> {
+  cmdName: string
+  cmdType: string
+  payload: PayloadType
 }

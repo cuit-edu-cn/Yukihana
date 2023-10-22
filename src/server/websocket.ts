@@ -21,7 +21,7 @@ export const startWebsocketServer = () => {
     ws.on('message', async function incoming(message) {
       let msg: ActionRequest
       try {
-        log.info('server: received: %s', message);
+        log.info('server: received: ', message.toString());
         // 此处解析可能会失败
         msg = JSON.parse(message.toString())
         const ret = checkBaseRequestField(msg)
@@ -44,6 +44,7 @@ export const startWebsocketServer = () => {
       }
 
       // 获取动作处理函数
+      log.info('request action:', msg.action)
       const handle = getActionHandle(msg.action)
       if (handle != undefined) {
         let resp: ActionResponse

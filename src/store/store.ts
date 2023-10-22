@@ -3,8 +3,19 @@ import { ActionResponse } from "../onebot/actions/interfaces"
 import { IpcDownInfo, IpcUpInfo } from "./interfaces"
 
 const log = useLogger('Store')
-const ipcMainMap: Record<string, (event: Electron.IpcMainEvent, info: IpcUpInfo, ...args: any[]) => void> = {}
-const ipcMainReceive: Record<string, (info: IpcDownInfo, data: any) => void> = {}
+
+/**
+ * 渲染进程 -> 主进程
+ * <channel, function>
+ */
+const ipcUpMap: Record<string, (event: Electron.IpcMainEvent, info: IpcUpInfo, ...args: any[]) => void> = {}
+
+type IpcDownHandleType = (info: IpcDownInfo, data: any) => void
+/**
+ * 主进程 -> 渲染进程
+ * <channel, function>
+ */
+const ipcDownMap: Record<string, IpcDownHandleType> = {}
 
 /**
  * GUI通过通道发送消息给electron
@@ -16,10 +27,10 @@ const ipcMainReceive: Record<string, (info: IpcDownInfo, data: any) => void> = {
  * @param listener 监听器
  */
 const addIpcMainSend = (channel: string, listener: (event: Electron.IpcMainEvent, ...args: any[]) => void) => {
-  if (ipcMainMap[channel]) {
+  if (ipcUpMap[channel]) {
     log.warn(`通道[${channel}]重复添加`)
   }
-  ipcMainMap[channel] = listener
+  ipcUpMap[channel] = listener
 }
 
 /**
@@ -29,7 +40,7 @@ const addIpcMainSend = (channel: string, listener: (event: Electron.IpcMainEvent
  * @returns 触发方法
  */
 const getIpcMainSend = (channel: string) => {
-  return ipcMainMap[channel]
+  return ipcUpMap[channel]
 }
 
 /**
@@ -40,8 +51,8 @@ const getIpcMainSend = (channel: string) => {
  * @param channel 通道
  * @param listener 监听器
  */
-const registerIpcDownHandle = (channel: string, listener: (info: IpcDownInfo, data: any) => void) => {
-  ipcMainReceive[channel] = listener
+const registerIpcDownHandle = (channel: string, listener: IpcDownHandleType) => {
+  ipcDownMap[channel] = listener
 }
 
 /**
@@ -51,7 +62,7 @@ const registerIpcDownHandle = (channel: string, listener: (info: IpcDownInfo, da
  */
 const getIpcDownHandle = (channel: string) => {
   // receive
-  return ipcMainReceive[channel]
+  return ipcDownMap[channel]
 }
 
 const ActionMap: Record<string, (p: any) => Promise<ActionResponse>> = {}
@@ -77,50 +88,71 @@ const registerActionHandle = (name: string, handle: (p: any) => Promise<ActionRe
   ActionMap[name] = handle
 }
 
+/**
+ * NT事件监听器类型
+ */
+type NTEventListenerHandle = (payload: any) => void
+/**
+ * eventName_cmdName
+ */
+type EventFullNameType = `${string}_${string}`
+/**
+ * NT事件监听
+ */
+interface NTEventListener {
+  /**
+   * always: 一直调用
+   * once: 调用一次后不再调用
+   */
+  type: 'always' | 'once'
+  handle: NTEventListenerHandle
+}
+const eventListenerListMap: Record<EventFullNameType, NTEventListener[]> = {}
+
+/**
+ * 获取事件的监听器
+ * @param eventFullName 事件名称 格式: `${eventName}_${cmdName}`
+ * @returns 监听函数列表
+ */
+const getEventListenerList = (eventFullName: EventFullNameType): NTEventListener[] | undefined => {
+  const listenerList = eventListenerListMap[eventFullName]
+  if (!listenerList) return undefined
+  const ret = [...listenerList]
+  // 吧一次性监听排除掉
+  eventListenerListMap[eventFullName] = listenerList.filter(e => e.type === 'always')
+  return ret
+}
+
+/**
+ * 添加事件的监听器
+ * @param eventFullName 事件名称
+ * @param type 事件类型 always长期 | once一次性
+ * @param listener 事件监听器
+ */
+const registerEventListener = (eventFullName: EventFullNameType, type: 'always' | 'once', listener: NTEventListenerHandle) => {
+  let listenerList = eventListenerListMap[eventFullName]
+  if (!listenerList) {
+    listenerList = []
+    eventListenerListMap[eventFullName] = listenerList
+  }
+  listenerList.push({
+    type,
+    handle: listener,
+  })
+}
+
 export const useStore = () => {
   return {
-    /**
-     * GUI通过通道发送消息给electron
-     * Electron收到消息触发listener
-     * 
-     * 因此，可以跳过GUI直接触发特定channel的listener
-     * 
-     * @param channel 通道
-     * @param listener 监听器
-     */
     addIpcMainSend,
-    /**
-     * 获取指定通道的触发方法
-     * 
-     * @param channel 通道
-     * @returns 触发方法
-     */
     getIpcMainSend,
     
-    /**
-     * 注册通道监听器（唯一）
-     * @param channel 通道
-     * @param listener 监听器
-     */
     registerIpcDownHandle,
-    /**
-     * 获取通道的监听器
-     * @param channel 通道
-     * @returns 监听器
-     */
     getIpcDownHandle,
     
-    /**
-     * 注册动作处理函数
-     * @param name 动作名称
-     * @param handle 动作处理函数
-     */
     registerActionHandle,
-    /**
-     * 获取动作处理函数
-     * @param action 动作名称
-     * @returns 处理函数
-     */
     getActionHandle,
+
+    getEventListenerList,
+    registerEventListener,
   }
 }

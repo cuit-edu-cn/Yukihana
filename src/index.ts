@@ -1,6 +1,7 @@
 import { useLogger } from "./common/log"
 import { initBaseEvent } from "./event/base";
 import { hook } from "./hook";
+import { initOnebot } from "./onebot/onebot";
 import { startServer } from "./server/server";
 import { test } from "./test/test";
 
@@ -12,6 +13,8 @@ hook()
 
 // 初始化基础事件处理
 initBaseEvent()
+
+initOnebot()
 
 // 启动服务器
 startServer()
