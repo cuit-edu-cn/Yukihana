@@ -2,7 +2,7 @@ import { WebSocketServer } from 'ws' // https://github.com/websockets/ws/issues/
 import { ActionRequest, ActionResponse } from '../onebot/actions/interfaces';
 import { useStore } from '../store/store';
 import { NIL as NIL_UUID} from 'uuid'
-import { checkBaseRequestField } from '../common/request';
+import { checkBaseRequestField } from '../common/action';
 import { useLogger } from '../common/log';
 
 const { getActionHandle } = useStore()
@@ -18,7 +18,7 @@ export const startWebsocketServer = () => {
   wss.on('connection', function connection(ws) {
     log.info('server: receive connection.');
     
-    ws.on('message', function incoming(message) {
+    ws.on('message', async function incoming(message) {
       let msg: ActionRequest
       try {
         log.info('server: received: %s', message);
@@ -46,7 +46,20 @@ export const startWebsocketServer = () => {
       // 获取动作处理函数
       const handle = getActionHandle(msg.action)
       if (handle != undefined) {
-        const resp = handle(msg.params)
+        let resp: ActionResponse
+        try {
+          resp = await handle(msg.params)
+          resp.id = msg.id
+        }
+        catch (e) {
+          resp = {
+            id: msg.id,
+            status: 'failed',
+            retcode: 20002,
+            data: null,
+            message: 'Internal Handler Error'
+          }
+        }
         ws.send(JSON.stringify(resp));
       }
       else {
