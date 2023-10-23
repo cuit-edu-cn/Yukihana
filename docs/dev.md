@@ -33,7 +33,7 @@
   3. 启动QQ.exe
   4. 正常启动说明准备工作完成；否则会提示“资源损坏”。
 
-# 二、开始介绍
+# 二、开发介绍
 
 ## 1. 运行
 
@@ -64,14 +64,14 @@
 
       然后，发送`getBuddyList`触发这个订阅；
 
-      最后，产生了一条不带callbakid的推送。
+      最后，产生了一条不带callbackid的推送。
 
 ## 2. 实现功能流程
 
   相关代码在：[getFriendList](../src/onebot/actions/friend.ts)
 
   1. 通过 `sendEvent` 先订阅 `onBuddyListChange` 事件
-  2. 再通过 `registerEventListener` 注册一次性的好友列表变更事件 `onBuddyListChange`
+  2. 再通过 `registerEventListener` 注册一次性的好友列表变更事件 `onBuddyListChange`，用来接收推送
   3. 最后，通过 `sendEvent` 发送 `getBuddyList` 操作触发好友列表变更事件
 
 ## 3. 注册Onebot的动作处理
