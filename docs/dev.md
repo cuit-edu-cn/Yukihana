@@ -33,7 +33,7 @@
   3. 启动QQ.exe
   4. 正常启动说明准备工作完成；否则会提示“资源损坏”。
 
-# 二、开始开发
+# 二、开始介绍
 
 ## 1. 运行
 
@@ -46,3 +46,36 @@
   1. 修改ts代码会自动编译
   2. 要应用更新需要关闭QQ，重新启动
   3. 有时代码错误导致QQ崩溃，需要在任务管理器中杀掉进程
+
+# 三、开发
+
+此处以获取好友列表为例
+
+## 1. 找出功能的流程
+
+  1. 打开QQ界面
+  2. 点击 联系人 -> 好友管理器
+  3. 使用好友名称搜索日志
+  4. 观察日志：
+
+      ![获取好友列表](./pic/get-buddy-list.png)
+
+  5. 可以发现，它先注册一个`onBuddyListChange`的订阅；
+
+      然后，发送`getBuddyList`触发这个订阅；
+
+      最后，产生了一条不带callbakid的推送。
+
+## 2. 实现功能流程
+
+  相关代码在：[getFriendList](../src/onebot/actions/friend.ts)
+
+  1. 通过 `sendEvent` 先订阅 `onBuddyListChange` 事件
+  2. 再通过 `registerEventListener` 注册一次性的好友列表变更事件 `onBuddyListChange`
+  3. 最后，通过 `sendEvent` 发送 `getBuddyList` 操作触发好友列表变更事件
+
+## 3. 注册Onebot的动作处理
+
+  相关代码在：[initFriend](../src/onebot/actions/friend.ts)
+  
+  在这个函数中，通过 `registerActionHandle` 来注册动作调用函数。

@@ -5,6 +5,12 @@ import { ActionResponse } from "./interfaces"
 
 const { registerActionHandle, registerEventListener } = useStore()
 
+/**
+ * 获取好友列表
+ * 
+ * @param p 空参数
+ * @returns 好友列表
+ */
 const getFriendList = async (p: {}): Promise<ActionResponse<any>> => {
   return new Promise(async (resolve, reject) => {
     const ret: ActionResponse = {
@@ -43,6 +49,10 @@ const getFriendList = async (p: {}): Promise<ActionResponse<any>> => {
   })
 }
 
+/**
+ * 初始化好友动作
+ */
 export const initFriend = () => {
+  // 注册获取好友列表
   registerActionHandle('get_friend_list', getFriendList)
 }
