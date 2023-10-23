@@ -16,5 +16,5 @@ export interface IpcDownInfo {
   type: 'response'
   callbackId?: string
   promiseStatue: string
-  eventName: string
+  eventName: `ns-${string}`
 }

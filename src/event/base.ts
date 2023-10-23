@@ -19,7 +19,7 @@ const callbackMap: Record<string, CallbackInfo> = {}
  * @param reqData 请求数据
  * @returns 结果
  */
-export const sendEvent = (channel: string, reqInfo: IpcUpInfo, reqData: any[]) => {
+export const sendEvent = (channel: `IPC_UP_${number}`, reqInfo: IpcUpInfo, reqData: any[]) => {
   log.info('sendEvent')
   return new Promise<{ info: IpcDownInfo, data: any[] }>((resolve, reject) => {
     const timeout = setTimeout(() => {
@@ -46,8 +46,8 @@ export const sendEvent = (channel: string, reqInfo: IpcUpInfo, reqData: any[]) =
 
 export const initBaseEvent = () => {
   // 目前似乎就5个
-  Array.from({ length: 5 }).map((i) => registerIpcDownHandle(`IPC_DOWN_${i}`, (info, data) => {
-    // log.info('Receive', info, data)
+  Array.from({ length: 5 }).map((_, i) => registerIpcDownHandle(`IPC_DOWN_${i + 1}`, (info, data) => {
+    log.info(`IPC_DOWN_${i + 1} Receive`, info, data)
     if (info.type == 'response') {
       // 响应数据给渲染层
       const { callbackId } = info
@@ -73,7 +73,7 @@ export const initBaseEvent = () => {
         const cmdList = data as CmdData[]
         for (const cmd of cmdList) {
           if (cmd.cmdType === 'event') {
-            const listenerList = getEventListenerList(`${info.eventName}_${cmd.cmdName}`)
+            const listenerList = getEventListenerList(`IPC_DOWN_${i + 1}_${info.eventName}_${cmd.cmdName}`)
             if (listenerList) {
               for (const listener of listenerList) {
                 listener.handle(cmd.payload)

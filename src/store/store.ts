@@ -95,7 +95,7 @@ type NTEventListenerHandle = (payload: any) => void
 /**
  * eventName_cmdName
  */
-type EventFullNameType = `${string}_${string}`
+type EventFullNameType = `IPC_DOWN_${number}_ns-${string}_${string}`
 /**
  * NT事件监听
  */
@@ -111,14 +111,14 @@ const eventListenerListMap: Record<EventFullNameType, NTEventListener[]> = {}
 
 /**
  * 获取事件的监听器
- * @param eventFullName 事件名称 格式: `${eventName}_${cmdName}`
+ * @param eventFullName 事件名称 格式: `${channel}_${eventName}_${cmdName}`
  * @returns 监听函数列表
  */
 const getEventListenerList = (eventFullName: EventFullNameType): NTEventListener[] | undefined => {
   const listenerList = eventListenerListMap[eventFullName]
   if (!listenerList) return undefined
   const ret = [...listenerList]
-  // 吧一次性监听排除掉
+  // 把一次性的监听排除掉
   eventListenerListMap[eventFullName] = listenerList.filter(e => e.type === 'always')
   return ret
 }
