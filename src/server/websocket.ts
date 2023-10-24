@@ -77,5 +77,8 @@ export const startWebsocketServer = () => {
     });
 
   });
+  wss.on('error', (e) => {
+    log.info('failed to create server!', e)
+  })
 
 }
