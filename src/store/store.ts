@@ -1,4 +1,5 @@
 import { useLogger } from "../common/log"
+import { ActionParams } from "../event/nt/ipc_up/interfaces"
 import { ActionResponse } from "../onebot/actions/interfaces"
 import { IpcDownInfo, IpcUpInfo } from "./interfaces"
 
@@ -81,7 +82,7 @@ const getActionHandle = (action: string) => {
  * @param name 动作名称
  * @param handle 动作处理函数
  */
-const registerActionHandle = (name: string, handle: (p: any) => Promise<ActionResponse>) => {
+const registerActionHandle = <T extends ActionParams>(name: string, handle: (p: T) => Promise<ActionResponse>) => {
   if (ActionMap[name]) {
     log.warn('Action: %s已经被注册，将覆盖旧的处理函数', name)
   }

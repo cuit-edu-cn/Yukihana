@@ -30,3 +30,37 @@ export interface CmdData<PayloadType = any> {
   cmdType: string
   payload: PayloadType
 }
+
+export interface ActionParams {
+  /**
+   * 内部标识，用于类型提示
+   */
+  _mark: 'action'
+}
+export declare namespace Login {
+  interface LoginData extends ActionParams {
+    loginInfo: {
+      uin: `${number}`
+      passwordMd5: string
+      step: number
+      newDeviceLoginSig: string
+      proofWaterSig: string
+      proofWaterRand: string
+      proofWaterSid: string
+    }
+  }
+
+  export interface LoginResponse {
+    result: `${number}`
+    loginErrorInfo: {
+      step: number
+      errMsg: string
+      proofWaterUrl: string
+      newDevicePullQrCodeSig: string
+      jumpUrl: string
+      jumpWord: string
+      tipsTitle: string
+      tipsContent: string
+    }
+  }
+}
