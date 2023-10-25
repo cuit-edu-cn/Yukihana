@@ -19,9 +19,9 @@ const callbackMap: Record<string, CallbackInfo> = {}
  * @param reqData 请求数据
  * @returns 结果
  */
-export const sendEvent = (channel: `IPC_UP_${number}`, reqInfo: IpcUpInfo, reqData: any[]) => {
+export const sendEvent = <ReqType = any, RespType = any>(channel: `IPC_UP_${number}`, reqInfo: IpcUpInfo, reqData: [string, ReqType, any]) => {
   log.info('sendEvent')
-  return new Promise<{ info: IpcDownInfo, data: any[] }>((resolve, reject) => {
+  return new Promise<{ info: IpcDownInfo, data: RespType }>((resolve, reject) => {
     const timeout = setTimeout(() => {
       log.info('log timeout')
       reject('timeout')

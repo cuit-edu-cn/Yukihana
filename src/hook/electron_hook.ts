@@ -74,7 +74,7 @@ const hookLoadUrl = () => {
           //   data
           // })
         }
-        log.info('\nsend:', channel, JSON.stringify(a))
+        log.info('send:', channel, JSON.stringify(a))
       }
       // log.info('寻找监听器...')
       const listener = getIpcDownHandle(channel)
