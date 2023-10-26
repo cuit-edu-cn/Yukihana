@@ -2,7 +2,7 @@ import { useLogger } from "./common/log"
 import { initBaseEvent } from "./event/base";
 import { hook } from "./hook";
 import { initOnebot } from "./onebot/onebot";
-import { startServer } from "./server/server";
+import { startServer } from "./server";
 import { test } from "./test/test";
 
 const log = useLogger('Index')

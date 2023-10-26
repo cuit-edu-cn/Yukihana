@@ -29,6 +29,8 @@ export const listenMessage = () => {
           ret.group_id = msg.peerUid
           break
       }
+      // TODO: NTQQ的消息格式转成框架的消息格式
+      // ret.message
       sendMessage(JSON.stringify(ret))
     }
   })

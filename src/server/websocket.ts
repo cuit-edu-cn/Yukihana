@@ -4,9 +4,11 @@ import { useStore } from '../store/store';
 import { NIL as NIL_UUID} from 'uuid'
 import { checkBaseRequestField } from '../common/action';
 import { useLogger } from '../common/log';
+import { useServer } from './server';
 
 const { getActionHandle } = useStore()
 const log = useLogger('WebSocket')
+const { addSendHandle, removeSendHandle } = useServer()
 
 /**
  * 启动Websocket服务器
@@ -16,8 +18,14 @@ export const startWebsocketServer = () => {
   const wss = new WebSocketServer({ port: 8080 });
 
   wss.on('connection', function connection(ws) {
-    log.info('server: receive connection.');
+    log.info('receive connection.');
     
+    // TODO: 注册事件监听
+    const eventHandle = (msg: string) => {
+      ws.send(msg)
+    }
+    addSendHandle(eventHandle)
+
     ws.on('message', async function incoming(message) {
       let msg: BotActionRequest
       try {
@@ -75,10 +83,13 @@ export const startWebsocketServer = () => {
         ws.send(JSON.stringify(result));
       }
     });
-
+    ws.on('close', (code, reason) => {
+      log.info('connection close.', code, reason)
+      removeSendHandle(eventHandle)
+    })
   });
   wss.on('error', (e) => {
     log.info('failed to create server!', e)
   })
-
+  return wss
 }
