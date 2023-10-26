@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws' // https://github.com/websockets/ws/issues/1538#issuecomment-1150203821
-import { ActionRequest, ActionResponse } from '../onebot/actions/interfaces';
+import { BotActionRequest, BotActionResponse } from '../onebot/actions/interfaces';
 import { useStore } from '../store/store';
 import { NIL as NIL_UUID} from 'uuid'
 import { checkBaseRequestField } from '../common/action';
@@ -19,7 +19,7 @@ export const startWebsocketServer = () => {
     log.info('server: receive connection.');
     
     ws.on('message', async function incoming(message) {
-      let msg: ActionRequest
+      let msg: BotActionRequest
       try {
         log.info('server: received: ', message.toString());
         // 此处解析可能会失败
@@ -32,7 +32,7 @@ export const startWebsocketServer = () => {
       }
       catch (e) {
         // 消息json格式不正确
-        const result: ActionResponse = {
+        const result: BotActionResponse = {
           id: NIL_UUID,
           status: 'failed',
           retcode: 10002,
@@ -47,7 +47,7 @@ export const startWebsocketServer = () => {
       log.info('request action:', msg.action)
       const handle = getActionHandle(msg.action)
       if (handle != undefined) {
-        let resp: ActionResponse
+        let resp: BotActionResponse
         try {
           resp = await handle(msg.params)
           resp.id = msg.id
@@ -65,7 +65,7 @@ export const startWebsocketServer = () => {
       }
       else {
         // 没有找到处理函数
-        const result: ActionResponse = {
+        const result: BotActionResponse = {
           id: msg.id,
           status: 'failed',
           retcode: 10002,

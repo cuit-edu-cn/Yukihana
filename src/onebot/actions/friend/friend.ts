@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto"
-import { sendEvent } from "../../event/base"
-import { useStore } from "../../store/store"
-import { ActionResponse } from "./interfaces"
+import { sendEvent } from "../../../event/base"
+import { useStore } from "../../../store/store"
+import { BotActionResponse } from "../interfaces"
 
 const { registerActionHandle, registerEventListener } = useStore()
 
@@ -11,9 +11,9 @@ const { registerActionHandle, registerEventListener } = useStore()
  * @param p 空参数
  * @returns 好友列表
  */
-const getFriendList = async (p: {}): Promise<ActionResponse<any>> => {
+const getFriendList = async (p: {}): Promise<BotActionResponse<any>> => {
   return new Promise(async (resolve, reject) => {
-    const ret: ActionResponse = {
+    const ret: BotActionResponse = {
       id: "",
       status: "ok",
       retcode: 0,

@@ -1,15 +1,15 @@
 import { randomUUID } from "crypto"
-import { sendEvent } from "../../event/base"
-import { BotActionParams, BotLogin } from "../../event/nt/ipc_up/interfaces"
-import { useStore } from "../../store/store"
-import { ActionResponse } from "./interfaces"
-import { NTQRCodePicture } from "../../event/nt/ipc_down/interfaces"
+import { sendEvent } from "../../../event/base"
+import { useStore } from "../../../store/store"
+import { BotActionResponse, BotActionParams } from "../interfaces"
+import { NTQRCodePicture } from "../../../event/nt/ipc_down/interfaces"
+import { BotLogin } from "./interfaces"
 
 const { registerActionHandle, registerEventListener } = useStore()
 
-const loginByAccountInfo = (p: BotLogin.LoginData): Promise<ActionResponse<any>> => {
+const loginByAccountInfo = (p: BotLogin.LoginData): Promise<BotActionResponse<any>> => {
   return new Promise(async (resolve, reject) => {
-    const ret: ActionResponse = {
+    const ret: BotActionResponse = {
       id: "",
       status: "ok",
       retcode: 0,
@@ -37,9 +37,9 @@ const loginByAccountInfo = (p: BotLogin.LoginData): Promise<ActionResponse<any>>
 
   })
 }
-const loginByQrCode = (p: BotActionParams): Promise<ActionResponse<any>> => {
+const loginByQrCode = (p: BotActionParams): Promise<BotActionResponse<any>> => {
   return new Promise(async (resolve, reject) => {
-    const ret: ActionResponse = {
+    const ret: BotActionResponse = {
       id: "",
       status: "ok",
       retcode: 0,

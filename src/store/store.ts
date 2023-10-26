@@ -1,6 +1,6 @@
 import { useLogger } from "../common/log"
-import { BotActionParams } from "../event/nt/ipc_up/interfaces"
-import { ActionResponse } from "../onebot/actions/interfaces"
+import { BotActionParams } from "../onebot/actions/interfaces"
+import { BotActionResponse } from "../onebot/actions/interfaces"
 import { IpcDownInfo, IpcUpInfo } from "./interfaces"
 
 const log = useLogger('Store')
@@ -66,7 +66,7 @@ const getIpcDownHandle = (channel: string) => {
   return ipcDownMap[channel]
 }
 
-const ActionMap: Record<string, (p: any) => Promise<ActionResponse>> = {}
+const ActionMap: Record<string, (p: any) => Promise<BotActionResponse>> = {}
 
 /**
  * 获取动作处理函数
@@ -82,7 +82,7 @@ const getActionHandle = (action: string) => {
  * @param name 动作名称
  * @param handle 动作处理函数
  */
-const registerActionHandle = <T extends BotActionParams>(name: string, handle: (p: T) => Promise<ActionResponse>) => {
+const registerActionHandle = <T extends BotActionParams>(name: string, handle: (p: T) => Promise<BotActionResponse>) => {
   if (ActionMap[name]) {
     log.warn('Action: %s已经被注册，将覆盖旧的处理函数', name)
   }

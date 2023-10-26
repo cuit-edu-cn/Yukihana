@@ -1,7 +1,8 @@
 /**
  * 动作请求
+ * 机器人 -> 框架
  */
-export interface ActionRequest<T = any> {
+export interface BotActionRequest<T = any> {
   /**
    * 唯一标识uuid
    */
@@ -18,8 +19,9 @@ export interface ActionRequest<T = any> {
 
 /**
  * 动作响应
+ * 框架 -> 机器人
  */
-export interface ActionResponse<T = any> {
+export interface BotActionResponse<T = any> {
   /**
    * 唯一标识uuid，与对应请求一致
    */
@@ -42,66 +44,9 @@ export interface ActionResponse<T = any> {
   message: string
 }
 
-/**
- * 获取用户信息动作的数据
- */
-export interface UserInfoReq {
-  user_id: string
-}
-
-/**
- * 响应用户信息动作的数据
- */
-export interface UserInfoResp {
-  user_id: string
-  user_name: string
-  user_displayname: string
-  user_remark: string
-}
-
-declare namespace BotMessage {
-
+export interface BotActionParams {
   /**
-   * 发送消息
+   * 内部标识，用于类型提示
    */
-  export interface SendMsg {
-    detail_type: 'private' | 'group'
-    group_id?: string
-    user_id?: string
-    message: BotMsgBase<Text | At | File | Location | Reply>[]
-  }
-
-  /**
-   * 撤回消息
-   */
-  export interface DeleteMsg {
-    message_id: string
-  }
-
-  /**
-   * 消息基础类型
-   */
-  export interface BotMsgBase<T> {
-    type: 'text' | 'mention' | 'mention_all' | 'image' | 'vioce' | 'audio' | 'video' | 'file' | 'location' | 'reply'
-    data: T
-  }
-  export interface Text {
-    text: string
-  }
-  export interface At {
-    user_id: string
-  }
-  export interface File {
-    file_id: string
-  }
-  export interface Location {
-    latitude: number
-    longitude: number
-    title: string
-    content: string
-  }
-  export interface Reply {
-    message_id: string
-    user_id: string
-  }
+  _mark: 'action'
 }

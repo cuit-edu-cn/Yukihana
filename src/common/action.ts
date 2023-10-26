@@ -1,5 +1,5 @@
 import { NIL as NIL_UUID } from "uuid";
-import { ActionRequest, ActionResponse } from "../onebot/actions/interfaces";
+import { BotActionRequest, BotActionResponse } from "../onebot/actions/interfaces";
 
 /**
  * 检查必要的请求参数
@@ -7,8 +7,8 @@ import { ActionRequest, ActionResponse } from "../onebot/actions/interfaces";
  * @param req 请求数据
  * @returns 响应数据 | undefined
  */
-export const checkBaseRequestField = (req: ActionRequest): ActionResponse | undefined => {
-  const ret: ActionResponse = {
+export const checkBaseRequestField = (req: BotActionRequest): BotActionResponse | undefined => {
+  const ret: BotActionResponse = {
     id: req.id || NIL_UUID,
     status: "failed",
     retcode: 10001,

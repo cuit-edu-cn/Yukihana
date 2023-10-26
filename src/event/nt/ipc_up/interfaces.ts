@@ -31,14 +31,16 @@ export interface NTCmdDataType<PayloadType = any> {
   payload: PayloadType
 }
 
-export interface BotActionParams {
+/**
+ * 登录数据
+ * NTQQ <-> 框架
+ */
+export declare namespace NTLogin {
   /**
-   * 内部标识，用于类型提示
+   * 登录数据
+   * 框架 -> NTQQ
    */
-  _mark: 'action'
-}
-export declare namespace BotLogin {
-  interface LoginData extends BotActionParams {
+  interface LoginData {
     loginInfo: {
       uin: `${number}`
       passwordMd5: string
@@ -50,7 +52,11 @@ export declare namespace BotLogin {
     }
   }
 
-  export interface BotLoginResponse {
+  /**
+   * 响应数据
+   * NTQQ -> 框架
+   */
+  export interface LoginResponse {
     result: `${number}`
     loginErrorInfo: {
       step: number
