@@ -30,7 +30,7 @@ export const sendGroupMessage = () => {
     callbackId: uuid,
     eventName: 'ns-ntApi-2'
   }
-  const reqData = [
+  const reqData: [string, any, any] = [
     "nodeIKernelMsgService/sendMsg",
     {
       "msgId": "0",
