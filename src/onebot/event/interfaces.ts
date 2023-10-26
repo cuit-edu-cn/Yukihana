@@ -1,8 +1,8 @@
 /**
  * 事件数据
  */
-export interface EventData {
-  id: string
+export interface EventDataType {
+  id?: string
   time: number
   /**
    * 事件类型
@@ -16,4 +16,7 @@ export interface EventData {
    * 事件子类型（详细类型的下一级类型）
    */
   sub_type: string
+  group_id?: string
+  user_id?: string
+  message?: any
 }

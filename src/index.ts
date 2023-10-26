@@ -6,7 +6,7 @@ import { startServer } from "./server/server";
 import { test } from "./test/test";
 
 const log = useLogger('Index')
-log.info('info: hi bot!!')
+log.info('hi ntqq bot!! v0.0.2')
 
 // 核心事件hook
 hook()

@@ -59,7 +59,7 @@ export interface UserInfoResp {
   user_remark: string
 }
 
-declare namespace Message {
+declare namespace BotMessage {
 
   /**
    * 发送消息
@@ -68,7 +68,7 @@ declare namespace Message {
     detail_type: 'private' | 'group'
     group_id?: string
     user_id?: string
-    message: Base<Text | At | File | Location | Reply>[]
+    message: BotMsgBase<Text | At | File | Location | Reply>[]
   }
 
   /**
@@ -81,7 +81,7 @@ declare namespace Message {
   /**
    * 消息基础类型
    */
-  export interface Base<T> {
+  export interface BotMsgBase<T> {
     type: 'text' | 'mention' | 'mention_all' | 'image' | 'vioce' | 'audio' | 'video' | 'file' | 'location' | 'reply'
     data: T
   }

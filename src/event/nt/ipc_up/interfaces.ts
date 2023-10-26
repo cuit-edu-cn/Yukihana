@@ -25,20 +25,20 @@ declare namespace NsNtApi2 {
 
 }
 
-export interface CmdData<PayloadType = any> {
+export interface NTCmdDataType<PayloadType = any> {
   cmdName: string
   cmdType: string
   payload: PayloadType
 }
 
-export interface ActionParams {
+export interface BotActionParams {
   /**
    * 内部标识，用于类型提示
    */
   _mark: 'action'
 }
-export declare namespace Login {
-  interface LoginData extends ActionParams {
+export declare namespace BotLogin {
+  interface LoginData extends BotActionParams {
     loginInfo: {
       uin: `${number}`
       passwordMd5: string
@@ -50,7 +50,7 @@ export declare namespace Login {
     }
   }
 
-  export interface LoginResponse {
+  export interface BotLoginResponse {
     result: `${number}`
     loginErrorInfo: {
       step: number

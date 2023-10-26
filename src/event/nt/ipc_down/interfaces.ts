@@ -1,4 +1,4 @@
-export interface QRCodePicture {
+export interface NTQRCodePicture {
   qrcodeInfo: {
     pngBase64QrcodeData: string
     qrcodeUrl: string

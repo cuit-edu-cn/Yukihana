@@ -1,13 +1,13 @@
 import { randomUUID } from "crypto"
 import { sendEvent } from "../../event/base"
-import { ActionParams, Login } from "../../event/nt/ipc_up/interfaces"
+import { BotActionParams, BotLogin } from "../../event/nt/ipc_up/interfaces"
 import { useStore } from "../../store/store"
 import { ActionResponse } from "./interfaces"
-import { QRCodePicture } from "../../event/nt/ipc_down/interfaces"
+import { NTQRCodePicture } from "../../event/nt/ipc_down/interfaces"
 
 const { registerActionHandle, registerEventListener } = useStore()
 
-const loginByAccountInfo = (p: Login.LoginData): Promise<ActionResponse<any>> => {
+const loginByAccountInfo = (p: BotLogin.LoginData): Promise<ActionResponse<any>> => {
   return new Promise(async (resolve, reject) => {
     const ret: ActionResponse = {
       id: "",
@@ -37,7 +37,7 @@ const loginByAccountInfo = (p: Login.LoginData): Promise<ActionResponse<any>> =>
 
   })
 }
-const loginByQrCode = (p: ActionParams): Promise<ActionResponse<any>> => {
+const loginByQrCode = (p: BotActionParams): Promise<ActionResponse<any>> => {
   return new Promise(async (resolve, reject) => {
     const ret: ActionResponse = {
       id: "",
@@ -46,7 +46,7 @@ const loginByQrCode = (p: ActionParams): Promise<ActionResponse<any>> => {
       data: undefined,
       message: ""
     }
-    registerEventListener('IPC_DOWN_1_ns-ntApi-1_nodeIKernelLoginListener/onQRCodeGetPicture', 'once', (payload: QRCodePicture) => {
+    registerEventListener('IPC_DOWN_1_ns-ntApi-1_nodeIKernelLoginListener/onQRCodeGetPicture', 'once', (payload: NTQRCodePicture) => {
       ret.data = payload
       resolve(ret)
     })

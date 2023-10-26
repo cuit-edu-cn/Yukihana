@@ -2,7 +2,7 @@ services:
   ntqq-docker:
     # image: yuukinya/chronocat-docker
     build:
-      context: .
+      context: ./docker
       dockerfile: Dockerfile
     tty: true
     container_name: ntqq-docker

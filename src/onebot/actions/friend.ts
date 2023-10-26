@@ -26,7 +26,7 @@ const getFriendList = async (p: {}): Promise<ActionResponse<any>> => {
       type: 'request',
       callbackId: randomUUID(),
       eventName: 'ns-NodeStoreApi-2-register'
-    }, ['onBuddyListChange'])
+    }, ['onBuddyListChange', null, null])
 
     // 超时拒绝
     let time = setTimeout(() => {
@@ -44,7 +44,7 @@ const getFriendList = async (p: {}): Promise<ActionResponse<any>> => {
       type: 'request',
       callbackId: randomUUID(),
       eventName: 'ns-NodeStoreApi-2'
-    }, ['getBuddyList'])
+    }, ['getBuddyList', null, null])
     
   })
 }

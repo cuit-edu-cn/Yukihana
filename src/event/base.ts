@@ -2,7 +2,7 @@ import { useLogger } from "../common/log"
 import { IpcDownInfo, IpcUpInfo } from "../store/interfaces"
 import { useStore } from "../store/store"
 import { CallbackInfo } from "./interfaces"
-import { CmdData } from "./nt/ipc_up/interfaces"
+import { NTCmdDataType } from "./nt/ipc_up/interfaces"
 
 const { registerIpcDownHandle, getIpcMainSend, getEventListenerList } = useStore()
 const log = useLogger('Base')
@@ -70,7 +70,7 @@ export const initBaseEvent = () => {
       const { callbackId } = info
       if (!callbackId) {
         // 推送订阅信息，不携带回调ID
-        const cmdList = data as CmdData[]
+        const cmdList = data as NTCmdDataType[]
         for (const cmd of cmdList) {
           if (cmd.cmdType === 'event') {
             const listenerList = getEventListenerList(`IPC_DOWN_${i + 1}_${info.eventName}_${cmd.cmdName}`)

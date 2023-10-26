@@ -8,3 +8,9 @@ export const startServer = () => {
   log.info('start websocket server...')
   startWebsocketServer()
 }
+const sendMessage = (msg: string) => {
+
+}
+export const useServer = () => ({
+  sendMessage
+})
