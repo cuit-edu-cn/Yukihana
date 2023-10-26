@@ -21,7 +21,7 @@ declare namespace BotMessage {
   /**
    * 消息基础类型
    */
-  export interface BotMsgBase<T> {
+  export interface BotMsgBase<T = any> {
     type: 'text' | 'mention' | 'mention_all' | 'image' | 'vioce' | 'audio' | 'video' | 'file' | 'location' | 'reply'
     data: T
   }

@@ -1,3 +1,4 @@
+import { convertNTMessage2BotMessage } from "../../common/convert"
 import { NTMessagePayloadType } from "../../event/interfaces"
 import { useServer } from "../../server/server"
 import { useStore } from "../../store/store"
@@ -7,8 +8,8 @@ const { registerEventListener } = useStore()
 const { sendMessage } = useServer()
 
 export const listenMessage = () => {
-  registerEventListener('IPC_DOWN_2_ns-ntApi-2_nodeIKernelMsgListener/onRecvMsg', 'always', (paload: NTMessagePayloadType) => {
-    const { msgList } = paload
+  registerEventListener('IPC_DOWN_2_ns-ntApi-2_nodeIKernelMsgListener/onRecvMsg', 'always', (payload: NTMessagePayloadType) => {
+    const { msgList } = payload
     for (const msg of msgList) {
       const ret: EventDataType = {
         time: parseInt(msg.msgTime),
@@ -29,8 +30,7 @@ export const listenMessage = () => {
           ret.group_id = msg.peerUid
           break
       }
-      // TODO: NTQQ的消息格式转成框架的消息格式
-      // ret.message
+      ret.message = convertNTMessage2BotMessage(msg.elements)
       sendMessage(JSON.stringify(ret))
     }
   })
