@@ -61,6 +61,7 @@ export const startWebsocketServer = () => {
           resp.id = msg.id
         }
         catch (e) {
+          log.error('内部错误:', e)
           resp = {
             id: msg.id,
             status: 'failed',

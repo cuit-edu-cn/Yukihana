@@ -12,15 +12,8 @@ export declare namespace BotLogin {
    * 机器人 -> 框架
    */
   interface LoginData extends BotActionParams {
-    loginInfo: {
-      uin: `${number}`
-      passwordMd5: string
-      step: number
-      newDeviceLoginSig: string
-      proofWaterSig: string
-      proofWaterRand: string
-      proofWaterSid: string
-    }
+    id: number
+    password: string
   }
 
   /**

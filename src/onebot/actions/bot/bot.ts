@@ -4,11 +4,16 @@ import { useStore } from "../../../store/store"
 import { BotActionResponse, BotActionParams } from "../interfaces"
 import { NTQRCodePicture } from "../../../event/nt/ipc_down/interfaces"
 import { BotLogin } from "./interfaces"
+import { NTLogin } from "../../../event/nt/ipc_up/interfaces"
+import { useLogger } from "../../../common/log"
 
 const { registerActionHandle, registerEventListener } = useStore()
 
+const log = useLogger('Bot Action')
+
 const loginByAccountInfo = (p: BotLogin.LoginData): Promise<BotActionResponse<any>> => {
   return new Promise(async (resolve, reject) => {
+    log.info("req param from client:", JSON.stringify(p))
     const ret: BotActionResponse = {
       id: "",
       status: "ok",
@@ -16,20 +21,32 @@ const loginByAccountInfo = (p: BotLogin.LoginData): Promise<BotActionResponse<an
       data: undefined,
       message: ""
     }
-    if (p.loginInfo === undefined || p.loginInfo == null || typeof p.loginInfo !== 'object') {
+    if (p.id === undefined || p.id == null || typeof p.id !== 'number') {
       ret.status = 'failed'
       ret.retcode = 10003
-      ret.message = 'loginInfo参数不正确'
+      ret.message = 'id参数不正确'
       reject(ret)
       return
     }
+    const ntLogin: NTLogin.LoginData = {
+      loginInfo: {
+        uin: `${p.id}`,
+        passwordMd5: p.password,
+        step: 0,
+        newDeviceLoginSig: "",
+        proofWaterSig: "",
+        proofWaterRand: "",
+        proofWaterSid: ""
+      }
+    }
+    log.info("req to nt:", JSON.stringify(ntLogin))
     const resp = await sendEvent('IPC_UP_1', {
       type: "request",
       callbackId: randomUUID(),
       eventName: "ns-ntApi-1"
     }, [
       'nodeIKernelLoginService/passwordLogin',
-      p,
+      ntLogin,
       null
     ])
     ret.data = resp.data

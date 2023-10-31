@@ -2,6 +2,9 @@ import { ipcMain, BrowserWindow, app } from 'electron'
 import { useLogger } from '../common/log';
 import { useStore } from '../store/store';
 import { readFileSync, writeFileSync } from 'fs';
+
+const log = useLogger('ElectronHook')
+
 // let tempEventStore: any = {};
 // (() => {
 //   try {
@@ -15,9 +18,9 @@ import { readFileSync, writeFileSync } from 'fs';
 //     }, 2000)
 //   }
 // })()
-const log = useLogger('ElectronHook')
+
 export const getHookedBrowserWindow = () => {
-  const hookBrowserWindow = (OriginalBrowserWindow: any) => {
+  const hookBrowserWindow = (_BrowserWindow: any) => {
     function HookedBrowserWindow(options: Electron.BrowserWindowConstructorOptions | undefined) {
       // 修改或增加构造函数的选项
       try {
@@ -31,13 +34,13 @@ export const getHookedBrowserWindow = () => {
   
       }
       // 使用修改后的选项调用原始构造函数
-      return new OriginalBrowserWindow(options);
+      return new _BrowserWindow(options);
     }
   
     // 复制原始构造函数的原型链并进行替换
-    HookedBrowserWindow.prototype = Object.create(OriginalBrowserWindow.prototype);
+    HookedBrowserWindow.prototype = Object.create(_BrowserWindow.prototype);
     HookedBrowserWindow.prototype.constructor = HookedBrowserWindow;
-    Object.setPrototypeOf(HookedBrowserWindow, OriginalBrowserWindow);
+    Object.setPrototypeOf(HookedBrowserWindow, _BrowserWindow);
   
     return HookedBrowserWindow;
   };
@@ -48,7 +51,7 @@ export const getHookedBrowserWindow = () => {
 
 const hookLoadUrl = () => {
   const { getIpcDownHandle } = useStore()
-  const originloadURL = BrowserWindow.prototype.loadURL;
+  const _loadURL = BrowserWindow.prototype.loadURL;
   BrowserWindow.prototype.loadURL = function(...args){
     // this.setMinimumSize(300, 300);
     // log.info('=====loadURL', ...args)
@@ -57,8 +60,8 @@ const hookLoadUrl = () => {
     //   this.webContents.toggleDevTools();
     // }, 3000)
     this.webContents.openDevTools()
-    const path = require('path');
-    const extPath = path.join(path.dirname(app.getAppPath()), "extensions");
+    // const path = require('path');
+    // const extPath = path.join(path.dirname(app.getAppPath()), "extensions");
     // log.info('----extPath----', extPath)
     const _send = this.webContents.send
     this.webContents.send = function(channel, ...a) {
@@ -91,8 +94,16 @@ const hookLoadUrl = () => {
     //   // ...
     //   log.info('-----Load Extension:', id)
     // })
-    return originloadURL.apply(this, args)
+    return _loadURL.apply(this, args)
   };
+}
+
+const hookLoadFile = () => {
+  const _loadFile = BrowserWindow.prototype.loadFile
+  BrowserWindow.prototype.loadFile = function(...args) {
+    log.info('Open page with loadFile', ...args)
+    return _loadFile.apply(this, args)
+  }
 }
 
 const hookIpcMain = () => {
@@ -105,7 +116,7 @@ const hookIpcMain = () => {
   ;(ipcMain as any)._on = ipcMain.on
   // gui发送消息，electron 收到消息
   ipcMain.on = function(channel, listener) {
-    // log.info('ipcMain on register:', args)
+    log.info('注册频道监听器，监听频道:', channel)
     if (channel.includes('IPC_UP')) {
       addIpcMainSend(channel, listener)
     }
@@ -133,7 +144,7 @@ const hookIpcMain = () => {
     })
   }
   
-  // 不能使用一个变量承接，会导致无法启动
+  // 不能使用一个新变量承接，会导致无法启动
   ;(ipcMain as any)._handle = ipcMain.handle
   ipcMain.handle = function(...args) {
     // log.info(`\nipcMain handle register from ${args[0]}:`, args)
@@ -150,5 +161,6 @@ const hookIpcMain = () => {
  */
 export const hookElectron = () => {
   hookLoadUrl()
+  hookLoadFile()
   hookIpcMain()
 }
