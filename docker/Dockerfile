@@ -8,7 +8,10 @@ COPY ./startup.sh /root/startup.sh
 COPY ./supervisord.conf /root/ntqq/supervisord.conf
 
 # 安装必要的软件包
-RUN apt-get update && apt-get install -y \
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
+    sed -i 's/security.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
+    sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
+    apt-get update && apt-get install -y \
     openbox \
     curl \
     unzip \
@@ -28,7 +31,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     # 安装novnc
-    && git config --global http.sslVerify false && git config --global http.postBuffer 1048576000 \
+    && git config --global http.sslVerify false \
     && cd /opt && git clone https://github.com/novnc/noVNC.git \
     && cd /opt/noVNC/utils && git clone https://github.com/novnc/websockify.git \
     && cp /opt/noVNC/vnc.html /opt/noVNC/index.html \
