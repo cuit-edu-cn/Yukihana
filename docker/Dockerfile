@@ -14,7 +14,6 @@ RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
     apt-get update && apt-get install -y \
     openbox \
     curl \
-    unzip \
     x11vnc \
     xvfb \
     fluxbox \
@@ -25,7 +24,6 @@ RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
     libsecret-1-0 \
     libgbm1 \
     libasound2 \
-    fonts-wqy-zenhei \
     git \
     gnutls-bin \    
     && apt-get clean \
@@ -33,16 +31,24 @@ RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
     # 安装novnc
     && git config --global http.sslVerify false \
     && cd /opt && git clone https://github.com/novnc/noVNC.git \
+    # 移除无用文件 for noVNC
+    && cd /opt/noVNC && rm -rf .git docs tests sanp \
     && cd /opt/noVNC/utils && git clone https://github.com/novnc/websockify.git \
+    # 移除无用文件 for websockify
+    && cd /opt/noVNC/utils/websockify && rm -rf .git docs tests docker Windows \
     && cp /opt/noVNC/vnc.html /opt/noVNC/index.html \
-    # 安装Linux QQ
-    && curl -o /root/linuxqq_3.1.2-13107_amd64.deb https://dldir1.qq.com/qqfile/qq/QQNT/ad5b5393/linuxqq_3.1.2-13107_amd64.deb \
-    && dpkg -i /root/linuxqq_3.1.2-13107_amd64.deb && apt-get -f install -y && rm /root/linuxqq_3.1.2-13107_amd64.deb \
     # 创建必要的目录
     && mkdir -p ~/.vnc \
     && chmod +x /root/startup.sh \
     && rm /etc/supervisor/supervisord.conf \
-    && mv /root/ntqq/supervisord.conf /etc/supervisor/supervisord.conf
+    && mv /root/ntqq/supervisord.conf /etc/supervisor/supervisord.conf \
+    # 移除软件包
+    && apt remove git -y
+# 安装Linux QQ (单独一步是为了方便更新版本)
+RUN curl -o /root/linuxqq_3.1.2-13107_amd64.deb https://dldir1.qq.com/qqfile/qq/QQNT/ad5b5393/linuxqq_3.1.2-13107_amd64.deb \
+    && dpkg -i /root/linuxqq_3.1.2-13107_amd64.deb && apt-get -f install -y && rm /root/linuxqq_3.1.2-13107_amd64.deb \
+    # 移除软件包
+    && apt remove curl -y
 
 # 设置容器启动时运行的命令
 CMD ["/bin/bash", "-c", "/root/startup.sh"]
