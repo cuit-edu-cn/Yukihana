@@ -3,7 +3,7 @@
  * 
  * 框架 <-> NTQQ
  */
-declare namespace NTSendMessage {
+export declare namespace NTSendMessage {
 
   /**
    * 发送消息
@@ -25,7 +25,7 @@ declare namespace NTSendMessage {
   export interface SendResponse {
   }
 
-  interface MsgElement {
+  export interface MsgElement {
     /**
      * 消息元素类型
      * 1 - 纯文本&@ textElement

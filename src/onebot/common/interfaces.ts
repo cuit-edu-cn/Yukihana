@@ -1,16 +1,18 @@
+import { BotActionParams } from "../actions/interfaces"
 
 export declare namespace BotMessage {
 
   /**
    * 发送消息
    */
-  export interface SendMsg {
+  export interface SendMsg extends BotActionParams {
     detail_type: 'private' | 'group'
     group_id?: string
     user_id?: string
-    message: BotMsgBase<Text | At | File | Location | Reply>[]
+    message: MessageType
   }
 
+  export type MessageType = BotMsgBase<Text | At | File | Location | Reply>[]
   /**
    * 撤回消息
    */
