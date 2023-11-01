@@ -1,3 +1,4 @@
+import { useConfig } from "../common/config"
 import { useLogger } from "../common/log"
 import { IpcDownInfo, IpcUpInfo } from "../store/interfaces"
 import { useStore } from "../store/store"
@@ -6,6 +7,7 @@ import { NTCmdDataType } from "./nt/ipc_up/interfaces"
 
 const { registerIpcDownHandle, getIpcMainSend, getEventListenerList } = useStore()
 const log = useLogger('Base')
+const { timeout } = useConfig()
 /**
  * <callbackId, CallbackInfo>
  */
@@ -13,6 +15,7 @@ const callbackMap: Record<string, CallbackInfo> = {}
 
 /**
  * 模拟渲染进程向主进程发送请求
+ * 超时reject
  * 
  * @param channel 通道
  * @param reqInfo 请求信息
@@ -22,15 +25,15 @@ const callbackMap: Record<string, CallbackInfo> = {}
 export const sendEvent = <ReqType = any, RespType = any>(channel: `IPC_UP_${number}`, reqInfo: IpcUpInfo, reqData: [string, ReqType, any]) => {
   log.info('sendEvent')
   return new Promise<{ info: IpcDownInfo, data: RespType }>((resolve, reject) => {
-    const timeout = setTimeout(() => {
+    const t = setTimeout(() => {
       log.info('log timeout')
       reject('timeout')
-    }, 30000)
+    }, timeout)
     if (reqInfo.callbackId) {
       callbackMap[reqInfo.callbackId] = {
         resolve,
         reject,
-        timeout,
+        timeout: t,
       }
       log.info('getIpcMainSend')
       const send = getIpcMainSend(channel)

@@ -54,7 +54,7 @@ interface NTMessageItemType {
   sendStatus: 2
   sendRemarkName: string
   /**
-   * 群昵称
+   * 用户的群昵称
    */
   sendMemberName: string
   sendNickName: string

@@ -132,7 +132,8 @@ const hookIpcMain = () => {
           //   info: a[0],
           //   data: a[1]
           // })
-          log.info(`ipcMain emit for ${channel}: eventName - ${a[0]?.eventName}, callbackId - ${a[0]?.callbackId}, data - ${JSON.stringify(a[1])}`)
+          if (!a[0]?.eventName?.includes('Logger'))
+            log.info(`ipcMain emit for ${channel}: eventName - ${a[0]?.eventName}, callbackId - ${a[0]?.callbackId}, data - ${JSON.stringify(a[1])}`)
         }
       }
       // log.info('args:', ...a)

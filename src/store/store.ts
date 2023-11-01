@@ -92,7 +92,7 @@ const registerActionHandle = <T extends BotActionParams>(name: string, handle: (
 /**
  * NT事件监听器类型
  */
-type NTEventListenerHandle = (payload: any) => void
+export type NTEventListenerHandle = (payload: any) => void
 /**
  * eventName_cmdName
  */
@@ -142,6 +142,21 @@ const registerEventListener = (eventFullName: EventFullNameType, type: 'always' 
   })
 }
 
+/**
+ * 移除事件的监听器
+ * 
+ * @param eventFullName 事件名称
+ * @param type 事件类型 always长期 | once一次性
+ * @param listener 事件监听器
+ */
+const removeEventListener = (eventFullName: EventFullNameType, listener: NTEventListenerHandle) => {
+  let listenerList = eventListenerListMap[eventFullName]
+  if (!listenerList) {
+    return
+  }
+  eventListenerListMap[eventFullName] = listenerList.filter(e => e.handle !== listener)
+}
+
 export const useStore = () => {
   return {
     addIpcMainSend,
@@ -155,5 +170,6 @@ export const useStore = () => {
 
     getEventListenerList,
     registerEventListener,
+    removeEventListener,
   }
 }

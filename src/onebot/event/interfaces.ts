@@ -1,9 +1,12 @@
+import { BotMessage } from "../common/interfaces"
+
 /**
  * 事件数据
  */
-export interface EventDataType {
+export interface EventDataType<T> {
   id?: string
   time: number
+  self: BotUserInfo
   /**
    * 事件类型
    */
@@ -16,7 +19,25 @@ export interface EventDataType {
    * 事件子类型（详细类型的下一级类型）
    */
   sub_type: string
-  group_id?: string
-  user_id?: string
-  message?: any
+  data: T
+}
+
+/**
+ * 机器人信息
+ */
+export interface BotUserInfo { 
+  id: number
+  uid: `u_${string}`
+}
+
+/**
+ * 对给对面ws的
+ */
+export interface MessageData {
+  message_id: string
+  group_id: number
+  sender_uid: string
+  sender_id: number
+  sender_member_name: string
+  elements: BotMessage.BotMsgBase[]
 }
