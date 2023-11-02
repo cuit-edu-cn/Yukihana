@@ -1,4 +1,4 @@
-# ntqq-bot
+# Yukihana
 
 基于NTQQ的机器人框架
 
