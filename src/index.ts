@@ -1,6 +1,6 @@
 import { useLogger } from "./common/log"
-import { initBaseEvent } from "./event/base";
 import { hook } from "./hook";
+import { initBaseEvent } from "./ntqq/event/base";
 import { initOnebot } from "./onebot/onebot";
 import { startServer } from "./server";
 import { test } from "./test/test";

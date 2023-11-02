@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto"
-import { sendEvent } from "../../../event/base"
 import { useStore } from "../../../store/store"
 import { BotActionResponse } from "../interfaces"
+import { sendEvent } from "../../../ntqq/event/base"
 
 const { registerActionHandle, registerEventListener } = useStore()
 

@@ -1,12 +1,11 @@
 import { randomUUID } from "crypto"
-import { sendEvent } from "../../../event/base"
 import { NTEventListenerHandle, useStore } from "../../../store/store"
 import { BotActionResponse, BotActionParams } from "../interfaces"
-import { NTQRCodePicture } from "../../../event/nt/ipc_down/interfaces"
 import { BotLogin } from "./interfaces"
-import { NTLogin } from "../../../event/nt/ipc_up/interfaces"
 import { useLogger } from "../../../common/log"
 import { getUserInfoByUid } from "../../common/user"
+import { sendEvent } from "../../../ntqq/event/base"
+import { NTLogin, NTQRCodeResponse } from "../../../ntqq/login/interfaces"
 
 const { registerActionHandle, registerEventListener, removeEventListener } = useStore()
 
@@ -31,7 +30,7 @@ const loginByAccountInfo = (p: BotLogin.LoginData): Promise<BotActionResponse<an
       reject(ret)
       return
     }
-    const ntLogin: NTLogin.LoginData = {
+    const ntLogin: NTLogin.LoginRequest = {
       loginInfo: {
         uin: `${p.id}`,
         passwordMd5: p.password,
@@ -44,7 +43,7 @@ const loginByAccountInfo = (p: BotLogin.LoginData): Promise<BotActionResponse<an
     }
     log.info("req to nt:", JSON.stringify(ntLogin))
     // 注册重复登录监听事件
-    const repeatLogin = (payload: NTQRCodePicture) => {
+    const repeatLogin = (payload: NTQRCodeResponse) => {
       if (!responseStart) {
         responseStart = true
         ret.status = 'failed'
@@ -89,7 +88,7 @@ const loginByQrCode = (p: BotActionParams): Promise<BotActionResponse<any>> => {
       data: undefined,
       message: ""
     }
-    registerEventListener('IPC_DOWN_1_ns-ntApi-1_nodeIKernelLoginListener/onQRCodeGetPicture', 'once', (payload: NTQRCodePicture) => {
+    registerEventListener('IPC_DOWN_1_ns-ntApi-1_nodeIKernelLoginListener/onQRCodeGetPicture', 'once', (payload: NTQRCodeResponse) => {
       ret.data = payload
       resolve(ret)
     })

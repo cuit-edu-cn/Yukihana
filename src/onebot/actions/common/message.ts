@@ -1,9 +1,9 @@
 import { randomUUID } from "crypto"
 import { useLogger } from "../../../common/log"
 import { IpcUpInfo } from "../../../store/interfaces"
-import { sendEvent } from "../../../event/base"
+import { sendEvent } from "../../../ntqq/event/base"
 import { BotMessage } from "../../common/interfaces"
-import { NTSendMessage } from "../../../event/nt/ipc_up/interfaces"
+import { NTSendMessage } from "../../../ntqq/message/interfaces"
 
 const log = useLogger('Message')
 

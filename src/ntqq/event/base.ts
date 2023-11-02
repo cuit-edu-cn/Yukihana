@@ -1,9 +1,9 @@
-import { useConfig } from "../common/config"
-import { useLogger } from "../common/log"
-import { IpcDownInfo, IpcUpInfo } from "../store/interfaces"
-import { useStore } from "../store/store"
-import { CallbackInfo } from "./interfaces"
-import { NTCmdDataType } from "./nt/ipc_up/interfaces"
+import { useConfig } from "../../common/config"
+import { useLogger } from "../../common/log"
+import { IpcDownInfo, IpcUpInfo } from "../../store/interfaces"
+import { useStore } from "../../store/store"
+import { NTCmdDataType } from "./interfaces"
+import { CallbackInfo } from "../interfaces"
 
 const { registerIpcDownHandle, getIpcMainSend, getEventListenerList } = useStore()
 const log = useLogger('Base')

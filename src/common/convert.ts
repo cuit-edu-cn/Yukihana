@@ -1,4 +1,5 @@
-import { NTMessageElementType } from "../event/interfaces";
+import { NTReceiveMessage } from "../ntqq/message/interfaces";
+import { BotMessage } from "../onebot/common/interfaces";
 
 /**
  * NTQQ的消息转bot消息
@@ -6,7 +7,7 @@ import { NTMessageElementType } from "../event/interfaces";
  * @param elems 来自NTQQ的消息
  * @returns 给bot的消息
  */
-export const convertNTMessage2BotMessage = (elems: NTMessageElementType[]): BotMessage.BotMsgBase[] => {
+export const convertNTMessage2BotMessage = (elems: NTReceiveMessage.NTMessageElementType[]): BotMessage.BotMsgBase[] => {
   const result: BotMessage.BotMsgBase[] = []
   for (const ele of elems) {
     switch (ele.elementType) {

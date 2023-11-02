@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto"
-import { sendEvent } from "../../event/base"
 import { NTEventListenerHandle, useStore } from "../../store/store"
 import { CurrentAccountInfo, UserDetailInfoType } from "./interfaces"
+import { sendEvent } from "../../ntqq/event/base"
 
 const { registerEventListener, removeEventListener } = useStore()
 

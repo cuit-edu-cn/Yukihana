@@ -15,4 +15,4 @@ services:
       - TZ=Asia/Shanghai
       - VNC_PASSWD=vncpasswd
     volumes:
-      - ./config:/root/.chronocat/config
+      - ./data/QQ:/root/.config/QQ
