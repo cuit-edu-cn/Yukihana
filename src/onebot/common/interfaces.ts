@@ -9,10 +9,9 @@ export declare namespace BotMessage {
     detail_type: 'private' | 'group'
     group_id?: string
     user_id?: string
-    message: MessageType
+    message: BotMsgBase[]
   }
 
-  export type MessageType = BotMsgBase<Text | At | File | Location | Reply>[]
   /**
    * 撤回消息
    */
@@ -23,30 +22,13 @@ export declare namespace BotMessage {
   /**
    * 消息基础类型
    */
-  export interface BotMsgBase<T = any> {
+  export interface BotMsgBase {
     type: 'text' | 'mention' | 'mention_all' | 'image' | 'vioce' | 'audio' | 'video' | 'file' | 'location' | 'reply'
-    data: T
-  }
-
-  /**
-   * 纯文本
-   */
-  export interface Text {
-    text: string
-  }
-
-  /**
-   * @ 操作
-   */
-  export interface At {
-    user_id: string
-  }
-
-  /**
-   * 文件消息
-   */
-  export interface File {
-    file_id: string
+    data: {
+      text?: string
+      file_id?: string
+      user_id: string
+    }
   }
 
   /**
