@@ -25,9 +25,10 @@ export declare namespace BotMessage {
   export interface BotMsgBase {
     type: 'text' | 'mention' | 'mention_all' | 'image' | 'vioce' | 'audio' | 'video' | 'file' | 'location' | 'reply'
     data: {
+      message_id?: string
       text?: string
       file_id?: string
-      user_id: string
+      user_id?: string
     }
   }
 

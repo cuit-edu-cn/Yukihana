@@ -2,13 +2,13 @@ import { BotMessage } from "../../onebot/common/interfaces";
 import { NTSendMessage } from "../../ntqq/message/message";
 import { NTMessage } from "../../ntqq/message/interfaces";
 
-export const sendMessageToFriend = async (targetId: string, msg: BotMessage.MessageType) => {
+export const sendMessageToFriend = async (targetId: string, msg: BotMessage.BotMsgBase[]) => {
 
   const elements: NTMessage.MsgElement[] = []
   for (const m of msg) {
     if (m.type === 'text') {
       elements.push({
-        elementType: 2,
+        elementType: 1,
         elementId: "",
         textElement: {
           content: '',

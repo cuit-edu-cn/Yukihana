@@ -14,7 +14,7 @@ export const convertNTMessage2BotMessage = (elems: NTReceiveMessage.NTMessageEle
       case 1:
         // 纯文本
         {
-          const text: BotMessage.BotMsgBase<BotMessage.Text> = {
+          const text: BotMessage.BotMsgBase = {
             type: 'text',
             data: {
               text: ele.textElement.content
@@ -27,7 +27,7 @@ export const convertNTMessage2BotMessage = (elems: NTReceiveMessage.NTMessageEle
       case 2:
         // 图片
         {
-          const pic: BotMessage.BotMsgBase<BotMessage.File> = {
+          const pic: BotMessage.BotMsgBase = {
             type: 'image',
             data: {
               file_id: ele.picElement.fileUuid
@@ -45,7 +45,7 @@ export const convertNTMessage2BotMessage = (elems: NTReceiveMessage.NTMessageEle
       case 7:
         // 引用回复
         {
-          const reply: BotMessage.BotMsgBase<BotMessage.Reply> = {
+          const reply: BotMessage.BotMsgBase = {
             type: 'image',
             data: {
               message_id: ele.replyElement.sourceMsgIdInRecords,
