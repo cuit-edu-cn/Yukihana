@@ -1,6 +1,6 @@
 import { useStore } from "../../../store/store"
+import { sendMessageToGroup } from "../../../transfer/message/group"
 import { BotMessage } from "../../common/interfaces"
-import { sendMessageToGroup } from "../common/message"
 import { BotActionResponse } from "../interfaces"
 
 const { registerActionHandle } = useStore()

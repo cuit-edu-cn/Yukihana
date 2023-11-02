@@ -3,7 +3,7 @@
  * 
  * 框架 <-> NTQQ
  */
-export declare namespace NTSendMessage {
+export declare namespace NTMessage {
 
   /**
    * 发送消息
@@ -50,6 +50,10 @@ export declare namespace NTSendMessage {
     atNtUid: string
   }
   interface MsgPeer {
+    /**
+     * 1 - ?
+     * 2 - 发送给群
+     */
     chatType: number
     peerUid: string
     guildId: string

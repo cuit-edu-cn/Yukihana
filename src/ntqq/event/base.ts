@@ -50,7 +50,6 @@ export const sendEvent = <ReqType = any, RespType = any>(channel: `IPC_UP_${numb
 export const initBaseEvent = () => {
   // 目前似乎就5个
   Array.from({ length: 5 }).map((_, i) => registerIpcDownHandle(`IPC_DOWN_${i + 1}`, (info, data) => {
-    log.info(`IPC_DOWN_${i + 1} Receive`, info, data)
     if (info.type == 'response') {
       // 响应数据给渲染层
       const { callbackId } = info
