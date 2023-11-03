@@ -13,16 +13,19 @@
   1. 打开一个Release页面
   2. 根据页面中完整包的链接，下载完整包
   3. 下载Release中的`skip_file_check`文件
-  4. 解压完整包中的Files目录到项目的`ntqq`目录下
+  4. ***解压完整包*** 到任意文件夹，移动其中的Files目录中的文件到 **项目** 的`ntqq`目录下（注意，**不能**将文件夹下的文件加入git版本控制）
 
       大致结构如下：
       ```
-      ntqq-bot
+      Yukihana
       ├─ntqq
       │  ├─lib
       │  ├─locales
       │  ├─obj
       │  └─resources
+      ├─src
+      ├─tools
+      ....
       ```
   5. 删除`ntqq/QQ.exe`，将`skip_file_check`复制到ntqq文件夹中并重命名为`QQ.exe`。（就是替换QQ.exe）
 
