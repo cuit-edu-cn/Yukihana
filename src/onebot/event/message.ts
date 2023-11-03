@@ -1,5 +1,5 @@
-import { convertNTMessage2BotMessage } from "../../common/convert"
-import { NTReceiveMessage } from "../../ntqq/message/interfaces"
+import { convertNTMessage2BotMessage } from "../../transfer/message/convert"
+import { NTReceiveMessageType } from "../../ntqq/message/interfaces"
 import { useServer } from "../../server/server"
 import { useStore } from "../../store/store"
 import { getBotAccount, getUserInfoByUid } from "../common/user"
@@ -14,7 +14,7 @@ const { sendMessage } = useServer()
  * 每收到一条新消息就会触发事件
  */
 export const listenMessage = () => {
-  registerEventListener('IPC_DOWN_2_ns-ntApi-2_nodeIKernelMsgListener/onRecvMsg', 'always', async (payload: NTReceiveMessage.NTMessagePayloadType) => {
+  registerEventListener('IPC_DOWN_2_ns-ntApi-2_nodeIKernelMsgListener/onRecvMsg', 'always', async (payload: NTReceiveMessageType.NTMessagePayloadType) => {
     const { msgList } = payload
     const botAccount = await getBotAccount()
     for (const msg of msgList) {

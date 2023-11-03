@@ -3,7 +3,7 @@
  * 
  * 框架 <-> NTQQ
  */
-export declare namespace NTMessage {
+export declare namespace NTSendMessageType {
 
   /**
    * 发送消息
@@ -36,7 +36,7 @@ export declare namespace NTMessage {
      */
     elementType: 1 | 2 | 6 | 7 | 11
     elementId: string
-    textElement: TextElement
+    textElement?: TextElement
   }
 
   /**
@@ -66,7 +66,7 @@ export declare namespace NTMessage {
  * 
  * NTQQ -> 框架
  */
-export declare namespace NTReceiveMessage {
+export declare namespace NTReceiveMessageType {
   /**
    * 消息事件的payload
    * 
@@ -200,15 +200,15 @@ export declare namespace NTReceiveMessage {
     elementType: 1 | 2 | 5 | 6 | 7 | 11
     elementId: `${number}`
     extBufForUI: "0x"
-    textElement: NTMessage.TextElementType
+    textElement: NTReceiveMessageType.TextElementType
     faceElement: null
     marketFaceElement: null
-    replyElement: NTMessage.ReplyElementType
+    replyElement: NTReceiveMessageType.ReplyElementType
 
     /**
      * 图片元素
      */
-    picElement: NTMessage.PicElementType
+    picElement: NTReceiveMessageType.PicElementType
     pttElement: null
     videoElement: null
     grayTipElement: null
@@ -231,13 +231,7 @@ export declare namespace NTReceiveMessage {
     tofuRecordElement: null
   }
 
-}
-/**
- * NTQQ的消息各种消息元素类型
- * 
- * NTQQ -> 框架
- */
-export declare namespace NTMessage {
+
 
   /**
    * 纯文本消息元素

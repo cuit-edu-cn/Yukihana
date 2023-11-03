@@ -1,12 +1,12 @@
 import { randomUUID } from "crypto"
 import { IpcUpInfo } from "../../store/interfaces"
 import { sendEvent } from "../event/base"
-import { NTMessage } from "./interfaces"
+import { NTSendMessageType } from "./interfaces"
 import { useLogger } from "../../common/log"
 
 const log = useLogger('NTMessage')
 
-export const NTSendMessage = async (msg: NTMessage.SendRequest): Promise<NTMessage.SendResponse> => {
+export const NTSendMessage = async (msg: NTSendMessageType.SendRequest): Promise<NTSendMessageType.SendResponse> => {
   log.info('send data:', msg)
   const channel = 'IPC_UP_2'
   const uuid = randomUUID()
@@ -15,10 +15,10 @@ export const NTSendMessage = async (msg: NTMessage.SendRequest): Promise<NTMessa
     callbackId: uuid,
     eventName: 'ns-ntApi-2'
   }
-  const reqData: [string, NTMessage.SendRequest, any] = [
+  const reqData: [string, NTSendMessageType.SendRequest, any] = [
     "nodeIKernelMsgService/sendMsg",
     msg,
     null
   ]
-  return await sendEvent<NTMessage.SendRequest, NTMessage.SendResponse>(channel, reqInfo, reqData)
+  return await sendEvent<NTSendMessageType.SendRequest, NTSendMessageType.SendResponse>(channel, reqInfo, reqData)
 }
