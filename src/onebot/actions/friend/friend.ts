@@ -1,9 +1,8 @@
-import { randomUUID } from "crypto"
 import { useStore } from "../../../store/store"
 import { BotActionResponse } from "../interfaces"
-import { sendEvent } from "../../../ntqq/event/base"
+import { NTGetFriendList } from "../../../ntqq/friend/friend"
 
-const { registerActionHandle, registerEventListener } = useStore()
+const { registerActionHandle } = useStore()
 
 /**
  * 获取好友列表
@@ -12,41 +11,16 @@ const { registerActionHandle, registerEventListener } = useStore()
  * @returns 好友列表
  */
 const getFriendList = async (p: {}): Promise<BotActionResponse<any>> => {
-  return new Promise(async (resolve, reject) => {
-    const ret: BotActionResponse = {
-      id: "",
-      status: "ok",
-      retcode: 0,
-      data: undefined,
-      message: ""
-    }
-
-    // 订阅好友列表更新事件
-    const regResult = await sendEvent('IPC_UP_2', {
-      type: 'request',
-      callbackId: randomUUID(),
-      eventName: 'ns-NodeStoreApi-2-register'
-    }, ['onBuddyListChange', null, null])
-
-    // 超时拒绝
-    let time = setTimeout(() => {
-      reject('timeout')
-    }, 30000)
-
-    registerEventListener(`IPC_DOWN_2_ns-NodeStoreApi-2_onBuddyListChange`, 'once', (payload) => {
-      ret.data = payload
-
-      // 清除超时计时
-      clearTimeout(time)
-      resolve(ret)
-    })
-    const reqResult = await sendEvent('IPC_UP_2', {
-      type: 'request',
-      callbackId: randomUUID(),
-      eventName: 'ns-NodeStoreApi-2'
-    }, ['getBuddyList', null, null])
-    
-  })
+  const ret: BotActionResponse = {
+    id: "",
+    status: "ok",
+    retcode: 0,
+    data: undefined,
+    message: ""
+  }
+  const list = await NTGetFriendList()
+  ret.data = list
+  return ret
 }
 
 /**

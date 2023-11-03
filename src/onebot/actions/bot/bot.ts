@@ -1,13 +1,6 @@
-import { randomUUID } from "crypto"
-import { NTEventListenerHandle, useStore } from "../../../store/store"
+import { useStore } from "../../../store/store"
 import { BotActionResponse, BotActionParams } from "../interfaces"
-import { BotLogin } from "./interfaces"
-import { useLogger } from "../../../common/log"
 import { getUserInfoByUid } from "../../common/user"
-import { sendEvent } from "../../../ntqq/event/base"
-import { NTLogin, NTQRCodeResponse } from "../../../ntqq/login/interfaces"
-import { NTLoginByAccountInfo } from "../../../ntqq/login/account"
-import { NTGetLoginQrCode } from "../../../ntqq/login/qrcode"
 import { loginByAccount, loginByQrCode } from "../../../transfer/login"
 
 const { registerActionHandle, registerEventListener, removeEventListener } = useStore()

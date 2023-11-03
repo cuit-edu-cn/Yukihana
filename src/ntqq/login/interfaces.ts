@@ -38,11 +38,17 @@ export declare namespace NTLogin {
      * 4 - 登录需要手Q验证。
      * 
      * 140022013 - 账号或密码错误
+     * 
+     * 140022008 - 滑动验证码
+     * 
      */
     result: `${number}`
     loginErrorInfo: {
       step: number
       errMsg: string
+      /**
+       * 滑动验证码的链接
+       */
       proofWaterUrl: string
       newDevicePullQrCodeSig: string
       jumpUrl: string
@@ -74,10 +80,15 @@ export declare namespace NTLogin {
       pollTimeInterval: number
     }
   }
+
+  /**
+   * 非常用设备，手机端确认异常
+   */
   export interface PayloadConfirmUnusualDeviceFailed {
     /**
      * 5 - 手Q取消授权
      * 9 - 手Q拒绝授权
+     * 10 - 手机端长时间未确认
      */
     errCode: number
     errMsg: string

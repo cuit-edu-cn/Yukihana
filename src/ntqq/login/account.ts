@@ -57,6 +57,9 @@ export const NTLoginByAccountInfo = (ntLogin: NTLogin.AccountLoginRequest): Prom
       else if(payload.errCode === 9) {
         msg = '手机端拒绝授权'
       }
+      else if(payload.errCode === 10) {
+        msg = '手机端长时间未确认'
+      }
       result.loginErrorInfo.errMsg = `手Q有登录，但是${msg}`
       reject(result)
     })
@@ -80,6 +83,7 @@ export const NTLoginByAccountInfo = (ntLogin: NTLogin.AccountLoginRequest): Prom
       ])
       // 非重复登录，移除监听
       onUserLoggedIn.remove()
+
       if (!responseStart) {
         responseStart = true
         const data = resp.data
@@ -91,11 +95,19 @@ export const NTLoginByAccountInfo = (ntLogin: NTLogin.AccountLoginRequest): Prom
           resolve(resp.data)
         }
         else if (data.result === '4'){
-          // 需要手Q确认
+          // 需要手Q确认，通知客户端
 
+        }
+        else if (data.result === '140022008') {
+          // 滑动验证
+          onLoginState.remove()
+          onQRCodeSessionQuickLoginFailed.remove()
+          onConfirmUnusualDeviceFailed.remove()
+          resolve(resp.data)
         }
         else {
           // 其它情况
+          onLoginState.remove()
           onQRCodeSessionQuickLoginFailed.remove()
           onConfirmUnusualDeviceFailed.remove()
           reject(resp.data)
