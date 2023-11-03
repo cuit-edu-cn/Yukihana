@@ -21,7 +21,7 @@ export const loginByAccount = async (p: BotLogin.LoginData): Promise<BotActionRe
     ret.message = 'id参数不正确'
     return ret
   }
-  const ntLogin: NTLogin.LoginRequest = {
+  const ntLogin: NTLogin.AccountLoginRequest = {
     loginInfo: {
       uin: `${p.id}`,
       passwordMd5: p.password,

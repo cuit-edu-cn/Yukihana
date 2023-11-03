@@ -140,6 +140,9 @@ const registerEventListener = (eventFullName: EventFullNameType, type: 'always' 
     type,
     handle: listener,
   })
+  return {
+    remove: () => removeEventListener(eventFullName, listener)
+  }
 }
 
 /**
