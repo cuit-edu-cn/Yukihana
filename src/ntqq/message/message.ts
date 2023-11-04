@@ -7,7 +7,7 @@ import { useLogger } from "../../common/log"
 const log = useLogger('NTMessage')
 
 export const NTSendMessage = async (msg: NTSendMessageType.SendRequest): Promise<NTSendMessageType.SendResponse> => {
-  log.info('send data:', msg)
+  log.info('send data:', msg, msg.msgElements)
   const channel = 'IPC_UP_2'
   const uuid = randomUUID()
   const reqInfo: IpcUpInfo = {

@@ -11,7 +11,7 @@ export declare namespace BotLogin {
    * 请求体
    * 机器人 -> 框架
    */
-  interface LoginData extends BotActionParams {
+  interface AccountLoginData extends BotActionParams {
     id: number
     password: string
   }
@@ -20,7 +20,7 @@ export declare namespace BotLogin {
    * 响应体
    * 框架 -> 机器人
    */
-  export interface LoginResponse {
+  export interface AccountLoginResponse {
     result: `${number}`
     loginErrorInfo: {
       step: number
@@ -32,5 +32,10 @@ export declare namespace BotLogin {
       tipsTitle: string
       tipsContent: string
     }
+  }
+  export interface QrCodeResponse {
+    qrCodeImage: string
+    qrCodeUrl: string
+    expireTime: number
   }
 }

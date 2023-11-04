@@ -30,6 +30,7 @@ export const listenMessage = () => {
         sub_type: "",
         data: {
           message_id: msg.msgId,
+          message_seq: msg.msgSeq,
           group_id: 0,
           sender_id: parseInt(senderUserInfo.info.uin),
           sender_uid: msg.senderUid,

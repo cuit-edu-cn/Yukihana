@@ -47,10 +47,14 @@ export const convertNTMessage2BotMessage = (elems: NTReceiveMessageType.NTMessag
         // 引用回复
         {
           const reply: BotMessage.BotMsgBase = {
-            type: 'image',
+            type: 'reply',
             data: {
-              message_id: ele.replyElement.sourceMsgIdInRecords,
-              user_id: ele.replyElement.senderUid
+              reply: {
+                msgId: ele.replyElement.replayMsgId,
+                msgSeq: ele.replyElement.replayMsgSeq,
+                text: ele.replyElement.sourceMsgText,
+                uid: ele.replyElement.senderUidStr,
+              }
             }
           }
           result.push(reply)
@@ -80,11 +84,12 @@ export const convertBotMessage2NTMessage = (elems: BotMessage.BotMsgBase[]): NTS
       case 'text':
         // 纯文本
         {
+          if (!ele.data.text) break
           const text: NTSendMessageType.MsgElement = {
             elementType: 1,
             elementId: "",
             textElement: {
-              content: '',
+              content: ele.data.text,
               atType: 0,
               atUid: "",
               atTinyId: "",
@@ -114,14 +119,25 @@ export const convertBotMessage2NTMessage = (elems: BotMessage.BotMsgBase[]): NTS
       case 'reply':
         // TODO:引用回复
         {
-          // const reply: BotMessage.BotMsgBase = {
-          //   type: 'image',
-          //   data: {
-          //     message_id: ele.replyElement.sourceMsgIdInRecords,
-          //     user_id: ele.replyElement.senderUid
-          //   }
-          // }
-          // result.push(reply)
+          if (!ele.data.reply) break
+          const reply: NTSendMessageType.MsgElement = {
+            elementType: 7,
+            elementId: "",
+            replyElement: {
+              replayMsgId: `${ele.data.reply.msgId}`,
+              replayMsgSeq:  `${ele.data.reply.msgSeq}`,
+              sourceMsgText:  `${ele.data.reply.text}`,
+              senderUid:  `${ele.data.reply.uid}`,
+              senderUidStr:  `${ele.data.reply.uid}`,
+              replyMsgClientSeq: "",
+              replyMsgTime: "",
+              replyMsgRevokeType: 0,
+              sourceMsgTextElems: [],
+              sourceMsgIsIncPic: false,
+              sourceMsgExpired: false,
+            }
+          }
+          result.push(reply)
         }
         break;
       // case 'marketFace':

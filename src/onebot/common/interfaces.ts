@@ -25,11 +25,48 @@ export declare namespace BotMessage {
   export interface BotMsgBase {
     type: 'text' | 'mention' | 'mention_all' | 'image' | 'vioce' | 'audio' | 'video' | 'file' | 'location' | 'reply'
     data: {
-      message_id?: string
+      /**
+       * 纯文本的内容
+       */
       text?: string
+      /**
+       * 图像等的文件ID
+       * 
+       * 待定
+       */
       file_id?: string
+      /**
+       * At时的对象ID
+       * 
+       * 待定
+       * 
+       * 注意区分 [全体成员] 与 [群成员]
+       */
       user_id?: string
+      /**
+       * 引用回复的信息
+       */
+      reply?: ReplyElement
     }
+  }
+
+  interface ReplyElement {
+    /**
+     * 消息ID
+     */
+    msgId: `${number}`
+    /**
+     * 消息序列
+     */
+    msgSeq: `${number}`
+    /**
+     * 源消息的文字内容
+     */
+    text: string
+    /**
+     * 源消息发送者的id
+     */
+    uid: `u_${string}`
   }
 
   /**

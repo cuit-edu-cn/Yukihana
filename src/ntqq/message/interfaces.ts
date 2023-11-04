@@ -28,35 +28,97 @@ export declare namespace NTSendMessageType {
   export interface MsgElement {
     /**
      * 消息元素类型
+     * 
      * 1 - 纯文本&@ textElement
+     * 
      * 2 - 图片 picElement
+     * 
      * 6 - 表情 faceElement
+     * 
      * 7 - 引用回复 replyElement
+     * 
      * 11 - 商城表情 marketFaceElement
+     * 
      */
     elementType: 1 | 2 | 6 | 7 | 11
     elementId: string
     textElement?: TextElement
+    replyElement?: ReplyElement
+  }
+
+  interface MsgPeer {
+    /**
+     * 1 - ?
+     * 
+     * 2 - 发送给群
+     * 
+     */
+    chatType: number
+    peerUid: string
+    guildId: string
   }
 
   /**
    * 纯文本
    */
   interface TextElement {
+    /**
+     * 普通消息 - 字符串
+     * 
+     * At人员 - @xxx
+     */
     content: string
+    /**
+     * 0 - 没有At
+     * 
+     * 1 - At全体成员
+     * 
+     * 2 - At群成员
+     * 
+     */
     atType: number
+    /**
+     * At成员 - 具体uid
+     * 
+     * At全体成员 - all
+     * 
+     */
     atUid: string
     atTinyId: string
+    /**
+     * At成员 - 具体uid
+     * 
+     * At全体成员 - all
+     * 
+     */
     atNtUid: string
   }
-  interface MsgPeer {
+
+  /**
+   * 引用回复
+   */
+  interface ReplyElement {
+    replayMsgId: `${number}`
+    replayMsgSeq: `${number}`
     /**
-     * 1 - ?
-     * 2 - 发送给群
+     * 引用消息的内容
+     * 
+     * 如果时图片，内容是图片的路径
      */
-    chatType: number
-    peerUid: string
-    guildId: string
+    sourceMsgText: string
+    senderUid: `u_${string}`
+    senderUidStr: `u_${string}`
+    replyMsgClientSeq: string
+    replyMsgTime: string
+    replyMsgRevokeType: number
+    sourceMsgTextElems: [],
+    /**
+     * 包含图片？
+     * 
+     * 实际测试：包含图片也是false
+     */
+    sourceMsgIsIncPic: boolean,
+    sourceMsgExpired: boolean,
   }
 
 }

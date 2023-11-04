@@ -1,12 +1,12 @@
-import { NTLoginByAccountInfo } from "../ntqq/login/account"
-import { NTLogin } from "../ntqq/login/interfaces"
-import { NTGetLoginQrCode } from "../ntqq/login/qrcode"
-import { BotLogin } from "../onebot/actions/bot/interfaces"
-import { BotActionResponse, BotActionParams } from "../onebot/actions/interfaces"
-import { useLogger } from "../common/log"
+import { NTLoginByAccountInfo } from "../../ntqq/login/account"
+import { NTLogin } from "../../ntqq/login/interfaces"
+import { NTGetLoginQrCode } from "../../ntqq/login/qrcode"
+import { BotLogin } from "../../onebot/actions/bot/interfaces"
+import { BotActionResponse, BotActionParams } from "../../onebot/actions/interfaces"
+import { useLogger } from "../../common/log"
 
 const log = useLogger('Login')
-export const loginByAccount = async (p: BotLogin.LoginData): Promise<BotActionResponse<any>> => {
+export const loginByAccount = async (p: BotLogin.AccountLoginData): Promise<BotActionResponse<any>> => {
   log.info("req param from client:", JSON.stringify(p))
   const ret: BotActionResponse = {
     id: "",
@@ -44,15 +44,23 @@ export const loginByAccount = async (p: BotLogin.LoginData): Promise<BotActionRe
   }
 
 }
-export const loginByQrCode = async (p: BotActionParams): Promise<BotActionResponse<any>> => {
-  const ret: BotActionResponse = {
+export const loginByQrCode = async (p: BotActionParams): Promise<BotActionResponse<BotLogin.QrCodeResponse>> => {
+  const ret: BotActionResponse<BotLogin.QrCodeResponse> = {
     id: "",
     status: "ok",
     retcode: 0,
-    data: undefined,
+    data: {
+      qrCodeImage: "",
+      qrCodeUrl: "",
+      expireTime: 0
+    },
     message: ""
   }
   const resp = await NTGetLoginQrCode()
-  ret.data = resp
+  ret.data = {
+    qrCodeImage: resp.qrcodeInfo.pngBase64QrcodeData,
+    qrCodeUrl: resp.qrcodeInfo.qrcodeUrl,
+    expireTime: resp.qrcodeInfo.pollTimeInterval
+  }
   return ret
 }

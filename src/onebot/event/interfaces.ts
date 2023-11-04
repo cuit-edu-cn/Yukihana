@@ -35,6 +35,7 @@ export interface BotUserInfo {
  */
 export interface MessageData {
   message_id: string
+  message_seq: string
   group_id: number
   sender_uid: string
   sender_id: number
