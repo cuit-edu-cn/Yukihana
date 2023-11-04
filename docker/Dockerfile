@@ -45,8 +45,8 @@ RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
     # 移除软件包
     && apt remove git -y
 # 安装Linux QQ (单独一步是为了方便更新版本)
-RUN curl -o /root/linuxqq_3.1.2-13107_amd64.deb https://dldir1.qq.com/qqfile/qq/QQNT/ad5b5393/linuxqq_3.1.2-13107_amd64.deb \
-    && dpkg -i /root/linuxqq_3.1.2-13107_amd64.deb && apt-get -f install -y && rm /root/linuxqq_3.1.2-13107_amd64.deb \
+RUN curl -o /root/linuxqq.deb https://dldir1.qq.com/qqfile/qq/QQNT/4cb54015/linuxqq_3.2.1-17816_amd64.deb \
+    && dpkg -i /root/linuxqq.deb && apt-get -f install -y && rm /root/linuxqq.deb \
     # 移除软件包
     && apt remove curl -y
 
