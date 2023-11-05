@@ -100,6 +100,25 @@ export const convertBotMessage2NTMessage = (elems: BotMessage.BotMsgBase[]): NTS
           result.push(text)
         }
         break;
+      case 'mention':
+        // At
+        {
+          if (!ele.data.at) break
+          const text: NTSendMessageType.MsgElement = {
+            elementType: 1,
+            elementId: "",
+            textElement: {
+              content: `@${ele.data.at.isAll ? '全体成员' : ele.data.at.name}`,
+              atType: ele.data.at.isAll ? 1 : 2,
+              atUid: `${ele.data.at.isAll ? 'all' : ele.data.at.uid}`,
+              atTinyId: "",
+              atNtUid: `${ele.data.at.isAll ? 'all' : ele.data.at.uid}`,
+            }
+          }
+          // TODO: 对@的处理
+          result.push(text)
+        }
+        break;
       case 'image':
         // TODO: 图片
         {

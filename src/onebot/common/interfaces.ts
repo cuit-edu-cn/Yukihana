@@ -42,7 +42,7 @@ export declare namespace BotMessage {
        * 
        * 注意区分 [全体成员] 与 [群成员]
        */
-      user_id?: string
+      at?: AtElement
       /**
        * 引用回复的信息
        */
@@ -67,6 +67,20 @@ export declare namespace BotMessage {
      * 源消息发送者的id
      */
     uid: `u_${string}`
+  }
+
+  interface AtElement {
+    /**
+     * 是否是全体成员
+     */
+    isAll: boolean
+    /**
+     * 用户ID
+     * 
+     * 
+     */
+    uid: string
+    name?: string
   }
 
   /**
